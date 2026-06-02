@@ -1,5 +1,9 @@
+-- 2026.06.01 실습 (숙제)
+
 DROP DATABASE IF EXISTS order_db;
 CREATE DATABASE IF NOT EXISTS order_db;
+
+use order_db;
 
 -- 테이블 삭제 (CASCADE: 참조 중인 테이블을 함께 삭제하는 옵션)
 DROP TABLE IF EXISTS tbl_payment_order CASCADE;
@@ -124,13 +128,13 @@ COMMIT;
 
 -- 조인 및 서브쿼리 문제
 
--- 1. 메뉴코드, 메뉴명, 가격, 카테고리이름, 주문가능여부 조회하기
+-- 1. 메뉴코드, 메뉴명, 가격, 카테고리이름, 주문가능여부 조회하기 (내부 조인)
 select m.menu_code, m.menu_name, m.menu_price, c.category_name, m.orderable_status
 from tbl_menu m
 join tbl_category c
 on m.category_code = c.category_code;
 
--- 2. 메뉴이름, 모든 카테고리이름 조회하기
+-- 2. 메뉴이름, 모든 카테고리이름 조회하기 (외부조인)
 select m.menu_name, c.category_name
 from tbl_category c
 left join tbl_menu m
@@ -146,7 +150,7 @@ SELECT
     (SELECT category_name FROM tbl_category c2 WHERE c2.category_code = c1.ref_category_code) AS 상위카테고리이름
 FROM tbl_category c1;
 
--- 4. 메뉴가격이 카테고리별 평균 메뉴가격보다 높은 메뉴 조회하기
+-- 4. 메뉴가격이 카테고리별 평균 메뉴가격보다 높은 메뉴 조회하기 (상관형태) __ 비상관형태도 있음. 아까 했음))
 
 select menu_name, menu_price, category_code
 from tbl_menu m1
