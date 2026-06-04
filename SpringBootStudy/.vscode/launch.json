@@ -1,0 +1,14 @@
+{
+  "configurations": [
+    {
+      "type": "java",
+      "name": "Spring Boot-Ex01IocApplication<ex01_ioc>",
+      "request": "launch",
+      "cwd": "${workspaceFolder}",
+      "mainClass": "com.example.ioc.Ex01IocApplication",
+      "projectName": "ex01_ioc",
+      "args": "",
+      "envFile": "${workspaceFolder}/.env"
+    }
+  ]
+}
