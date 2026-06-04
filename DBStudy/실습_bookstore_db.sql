@@ -185,7 +185,20 @@ where ordered_at between '2020-07-05' and '2020-07-09';
 -- 고객명
 -- 박세리
 
+--  1) 직관적인 방법
+select cust_name as 고객명 
+from tbl_customer
+where cust_id not in(select distinct cust_id from tbl_order);
 
+-- 2) 성능 추천
+-- Short-Circuit 평가 / 불필요한 검색을 최소화하는 것.
+select c.cust_name as 고객명
+from tbl_customer c
+where not exists
+    (select 1
+    from tbl_order o
+    where o.cust_id = c.cust_id
+);
 
 -- 11. '2020-07-04'부터 '2020-07-07' 사이에 주문 받은 도서를 제외하고 나머지 모든 주문 정보를 조회하시오.
 -- 구매번호  구매자  책이름           총구매액 주문일자
@@ -196,32 +209,60 @@ where ordered_at between '2020-07-05' and '2020-07-09';
 -- 9         김연아  올림픽 챔피언    13000    2020-07-09
 -- 10        장미란  역도 단계별 기술 24000    2020-07-10
 
+select o.order_id as 구매번호, c.cust_name as 구매자, b.book_name as 책이름, sum(b.price) as 총구매액, o.ordered_at as 주문일자
+from tbl_order o
+join tbl_book b on o.book_id = b.book_id
+join tbl_customer c on o.cust_id = c.cust_id
+where o.ordered_at not between '2020-07-04' and '2020-07-07'
+group by 구매번호, 구매자, 책이름, 주문일자
+order by o.ordered_at;
 
 
 -- 12. 가장 최근에 구매한 고객의 이름, 책이름, 주문일자를 조회하시오.
 -- 고객명  책이름            주문일자
 -- 장미란  역도 단계별 기술  2020-07-10
 
-
+select c.cust_name as 고객명, b.book_name as 책이름, o.ordered_at as 주문일자
+from tbl_order o
+join tbl_customer c on o.cust_id = c.cust_id
+join tbl_book b on o.book_id = b.book_id
+order by o.ordered_at desc
+limit 1;
 
 -- 13. 주문된 적이 없는 책의 주문번호, 책번호, 책이름을 조회하시오.
 -- 주문번호 책번호 책이름
 -- NULL     4      골프 바이블
 -- NULL     9      올림픽 이야기
 
-
+select null as 주문번호, b.book_id as 책번호, b.book_name as 책이름
+from tbl_book b
+where not exists (
+    select 1
+    from tbl_order o
+    where o.book_id = b.book_id
+);
 
 -- 14. 모든 서적 중에서 가장 비싼 서적을 구매한 고객이름, 책이름, 가격을 조회하시오.
 -- 가장 비싼 서적을 구매한 고객이 없다면 고객 이름은 NULL로 처리하시오.
 -- 고객명  책이름       책가격
 -- NULL    골프 바이블  35000
 
-
+select c.cust_name as 고객이름, b.book_name as 책이름, b.price as 가격
+from tbl_book b
+left join tbl_order o on b.book_id = o.book_id
+left join tbl_customer c on c.cust_id = o.book_id
+where b.price = (select max(price) from tbl_book);
 
 -- 15. '김연아'가 구매한 도서수를 조회하시오.
 -- 고객명  구매도서수
 -- 김연아  2
 
+select * from tbl_order;
+
+select c.cust_name as 고객명, count(*) as 구매도서수 from tbl_customer c
+join tbl_order o on c.cust_id = o.cust_id
+where c.cust_name = '김연아'
+group by c.cust_id, c.cust_name;
 
 
 -- 16. 출판사별로 판매된 책의 개수를 조회하시오.
@@ -232,12 +273,22 @@ where ordered_at between '2020-07-05' and '2020-07-09';
 -- 이상미디어 2
 -- 삼성당     0
 
-
+select b.publisher as 출판사, count(o.amount) as 판매된책수
+from tbl_book b
+left join tbl_order o on o.book_id = b.book_id
+group by b.publisher
+order by 판매된책수 desc;
 
 -- 17. '박지성'이 구매한 도서를 발간한 출판사(publisher) 개수를 조회하시오.
 -- 고객명  출판사수
 -- 박지성  3
 
+select c.cust_name as 고객명, count(b.book_id) as 출판사수
+from tbl_customer c
+join tbl_order o on o.cust_id = c.cust_id
+join  tbl_book b on o.book_id = b.book_id
+where c.cust_name = '박지성'
+group by c.cust_name, c.cust_id;
 
 
 -- 18. 모든 구매 고객의 이름과 총구매액(price * amount)을 조회하시오. 구매 이력이 있는 고객만 조회하시오.
@@ -247,7 +298,13 @@ where ordered_at between '2020-07-05' and '2020-07-09';
 -- 장미란  62000
 -- 추신수  86000
 
+select * from tbl_order;
 
+select c.cust_name as 고객명, sum(o.amount * b.price) as 총구매액 
+from tbl_order o
+join tbl_customer c on o.cust_id = c.cust_id
+join tbl_book b on o.book_id = b.book_id
+group by 고객명;
 
 -- 19. 모든 구매 고객의 이름과 총구매액(price * amount)과 구매횟수를 조회하시오. 구매 이력이 없는 고객은 총구매액과 구매횟수를 0으로 조회하고, 고객번호 오름차순으로 정렬하시오.
 -- 고객명  총구매액  구매횟수
@@ -257,9 +314,23 @@ where ordered_at between '2020-07-05' and '2020-07-09';
 -- 추신수  86000      2
 -- 박세리  0          0
 
+SELECT c.cust_name as 고객명, COALESCE(sum(b.price * o.amount),0) as 총구매액, count(o.order_id)
+FROM tbl_customer c
+LEFT JOIN tbl_order o ON o.cust_id = c.cust_id
+LEFT JOIN tbl_book b ON o.book_id = b.book_id
+group by c.cust_id, c.cust_name
+order by c.cust_id;
 
 
 -- 20. 총구매액이 2~3위인 고객의 이름와 총구매액을 조회하시오.
 -- 고객명  총구매액
 -- 추신수  86000
 -- 장미란  62000
+
+select c.cust_name as 고객명, sum(o.amount * b.price) as 총구매액
+from tbl_order o
+join tbl_customer c on o.cust_id = c.cust_id
+join tbl_book b on o.book_id = b.book_id
+group by c.cust_name
+order by 총구매액 desc
+limit 1, 2;
