@@ -3,8 +3,8 @@
   "java.project.outputPath": "bin",
   "java.project.referencedLibraries": [
     "lib/**/*.jar",
-    "c:\\Users\\user\\Desktop\\001.IT\\005.MegaZone\\SesacM\\JavaStudy\\lib\\gson-2.14.0.jar",
+    "c:\\Users\\user\\Desktop\\001.IT\\005.MegaZone\\SesacM\\JavaStudy\\lib\\lombok.jar",
     "c:\\Users\\user\\Desktop\\001.IT\\005.MegaZone\\SesacM\\JavaStudy\\lib\\mysql-connector-j-8.0.33.jar",
-    "c:\\Users\\user\\Desktop\\001.IT\\005.MegaZone\\SesacM\\JavaStudy\\lib\\lombok.jar"
+    "c:\\Users\\user\\Desktop\\001.IT\\005.MegaZone\\SesacM\\JavaStudy\\lib\\gson-2.14.0.jar"
   ]
 }
