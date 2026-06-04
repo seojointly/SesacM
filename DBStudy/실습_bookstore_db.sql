@@ -175,7 +175,10 @@ order by price desc limit 1;
 -- 8        10     올림픽 챔피언
 -- 9        10     올림픽 챔피언
 
-select order_id, book_id from tbl_order
+select o.order_id, o.book_id, b.book_name
+from tbl_order o
+join tbl_book b
+on o.book_id = b.book_id
 where ordered_at between '2020-07-05' and '2020-07-09';
 
 -- 10. 주문한 이력이 없는 고객의 이름을 조회하시오.
