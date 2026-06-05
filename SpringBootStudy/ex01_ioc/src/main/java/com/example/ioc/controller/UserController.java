@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Qualifier;
 // import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 
 import com.example.ioc.dto.UserDto;
 // import com.example.ioc.service.EmailNotificationService;
@@ -63,13 +64,13 @@ public class UserController {
       }
 
   // 1. 회원가입 (알림 서비스 제공)
-  @RequestMapping("/join")
+  @RequestMapping(value = "/join", method = RequestMethod.GET)
   public void createUser() {
     notificationService.sendNotification("반갑습니다!");
   }
 
   // 2. 회원 정보 수정 (시 )알림 서비스 사용)
-  @RequestMapping("/modify")
+  @RequestMapping(value = "/modify", method = RequestMethod.POST)
   public void modifyUser() {
     notificationService.sendNotification("수정되었습니다!");
   }

@@ -9,6 +9,26 @@
       "projectName": "ex01_ioc",
       "args": "",
       "envFile": "${workspaceFolder}/.env"
+    },
+    {
+      "type": "java",
+      "name": "Spring Boot-Ex02RequestApplication<ex02_request>",
+      "request": "launch",
+      "cwd": "${workspaceFolder}",
+      "mainClass": "com.example.request.Ex02RequestApplication",
+      "projectName": "ex02_request",
+      "args": "",
+      "envFile": "${workspaceFolder}/.env"
+    },
+    {
+      "type": "java",
+      "name": "Spring Boot-Ex03ResponseApplication<ex03_response>",
+      "request": "launch",
+      "cwd": "${workspaceFolder}",
+      "mainClass": "com.example.response.Ex03ResponseApplication",
+      "projectName": "ex03_response",
+      "args": "",
+      "envFile": "${workspaceFolder}/.env"
     }
   ]
 }
