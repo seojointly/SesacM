@@ -1,5 +1,7 @@
 -- 2026.06.01 실습 (숙제)
 
+select 1;
+
 DROP DATABASE IF EXISTS order_db;
 CREATE DATABASE IF NOT EXISTS order_db;
 
