@@ -1,0 +1,35 @@
+API 명세
+
+회원 등록
+  요청: POST /api/members // api/v2 등 버전 쓸 수 있음
+  요청 본문: {"email": "user@example.com"}
+  응답 본문: 등록된 회원 정보(JSON - MemberResponse)
+  상태 코드: 201 Created
+
+회원 전체 조회
+  요청: GET /api/members
+  요청 본문: X // 원래는 요청 파라미터가 있음
+  응답 본문: 회원 목록(List<MemberResponse></MemberResponse>)
+  상태 코드: 200 OK
+
+회원 단건 조회
+  요청: GET /api/members/{id}
+  요청 본문: X
+  응답 본문: 단건 회원 정보(MemberResponse)
+  상태 코드: 200 OK / 404 Not Found
+  
+회원 수정
+  요청: PUT /api/members/{id}
+  요청 본문: {"email": "user@example.com"}
+  응답 본문: 수정된 회원 정보(MemberResponse)
+  상태 코드: 200 OK
+
+회원 삭제
+  요청: DELETE /api/members/{id}
+  요청 본문: X
+  응답 본문: X // 삭제 요청일 때 주고받는 것이 없음. -- 네트워크 트래픽만 소모됨.
+  상태 코드: 204 No Content
+
+-> md 파일로 만들 것.
+---
+MemberResponse 를 저장하는 장소 = dto
