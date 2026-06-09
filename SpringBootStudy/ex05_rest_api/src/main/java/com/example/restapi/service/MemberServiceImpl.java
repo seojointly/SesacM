@@ -13,6 +13,8 @@ import org.springframework.stereotype.Service;
 import com.example.restapi.dto.MemberRequest;
 import com.example.restapi.dto.MemberResponse;
 
+
+// Back단
 @Service
 public class MemberServiceImpl implements MemberService {
 
@@ -47,7 +49,7 @@ public class MemberServiceImpl implements MemberService {
   @Override
   public MemberResponse findById(long id) {
     MemberResponse response = members.get(id);
-    if (response == null) {
+    if (response == null) { // 예외 가능
       throw new RuntimeException("존재하지 않는 회원 ID: " + id);// MemberNotFoundException 만들어서 사용하는 것 권장, 제일 안좋은것 -> RuntimeException      
     }
     return response;
