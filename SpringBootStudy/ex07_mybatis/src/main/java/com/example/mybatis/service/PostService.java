@@ -12,6 +12,7 @@ import com.example.mybatis.domain.Post;
 import com.example.mybatis.dto.PageResponse;
 import com.example.mybatis.dto.PostCreateRequest;
 import com.example.mybatis.dto.PostResponse;
+import com.example.mybatis.dto.PostUpdateRequest;
 import com.example.mybatis.exception.CustomException;
 import com.example.mybatis.exception.ErrorCode;
 import com.example.mybatis.mapper.PostMapper;
@@ -91,7 +92,23 @@ public class PostService {
 
   // Update
   @Transactional
-  public 
+  public PostResponse updatePosts(PostUpdateRequest request, Long id) {
+    // PostResponse foundMember = findById(id);
+    Post post = postMapper.findById(id) // postMapper.findById(id) 이게 opt 임 -> 못썼음
+        .orElseThrow(() -> new CustomException(ErrorCode.POST_NOT_FOUND)); // 실무 버전 
+
+      // 학습필요
+      post.setTitle(request.title());
+      post.setContent(request.content());
+      postMapper.update(post);
+      return PostResponse.from(post);
+  }
+
   // Delete
   @Transactional
+  public void deletePosts(Long id) {
+    postMapper.findById(id)
+      .orElseThrow(() -> new CustomException(ErrorCode.POST_NOT_FOUND));
+    postMapper.deleteById(id);
+  }
 }
