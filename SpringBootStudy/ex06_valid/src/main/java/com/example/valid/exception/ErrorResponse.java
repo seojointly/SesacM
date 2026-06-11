@@ -31,8 +31,8 @@ public record ErrorResponse(
 
   public record FieldErrorDetail(
     String field,
-    String value,
-    String reason
+    String value, // 실제 입력한 값
+    String reason // 이유 (MemberCreateRequest 패키지에 "이름은 필수 입력 항목입니다." 임)
   ) { }
 }
 

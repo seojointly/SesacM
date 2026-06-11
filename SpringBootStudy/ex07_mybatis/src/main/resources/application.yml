@@ -1,0 +1,25 @@
+# properies 버전 -> 마침표
+# spring.application.name=ex07_mybatis
+
+# yml(ynal) 버전 -> 콜론 + 공백 필요, 들여쓰기
+# 개발 세팅임. 운영은 사용 X
+spring: 
+  application: 
+    name: ex07_mybatis
+  datasource:
+    driver-class-name: 
+    url: jdbc:mysql://localhost:3306/mybatis_db?serverTimezone=Asia/Seoul
+    username: ${DB_USERNAME}
+    password: ${DB_PASSWORD}
+  sql:
+    init:
+      mode: always # 앱 구동 시 초기 스크립트(schema.sql, data.sql) 항상 실행
+
+mybatis:
+  configuration:
+    map-underscore-to-camel-case: true # user_id -> userId 로 자동 적용
+  type-aliases-package: com.example.mybatis.domain # com.example.mybatis.domain.User -> User
+  # mapper-locations:
+  # - mapper/user.xml # '-' : 배열 형태로 항목 당 '- '후 작성하면 됨
+  # - mapper/post.xml
+  mapper-locations: classpath:mapper/*.xml # 한번에 처리하는 방식 (협업 시 편리, 흔히 사용함)

@@ -15,6 +15,7 @@ public class GlobalExceptionHandler {
 
   // 구체적인 예외를 잡을 메서드를 만들자
   // @Valid 검증 실패 시 발생하는 MethodArgumentNotValidException 예외 처리기 
+  // MethodArgumentNotValidException -> 이게 필드 에러를 꺼내는 것
   // BindingResult 정보를 가져가면 더 정보를 넣을 수 있음.
   @ExceptionHandler(MethodArgumentNotValidException.class) // 예외 class 적음 -> 메서드를 먼저 만들고 붙이는 것. 본문 먼저 생성.
   public ResponseEntity<ErrorResponse> handleMethodArgumentNotValidException(MethodArgumentNotValidException e) { // 실제 예외를 받을 매개변수

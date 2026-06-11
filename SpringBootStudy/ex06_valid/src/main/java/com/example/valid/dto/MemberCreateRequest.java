@@ -6,6 +6,7 @@ import jakarta.validation.constraints.Size;
 import lombok.Builder;
 
 // 회원가입용
+
 @Builder
 public record MemberCreateRequest(
   @NotBlank(message = "이름은 필수 입력 항목입니다.") // 필수로 보겠다는 의미
