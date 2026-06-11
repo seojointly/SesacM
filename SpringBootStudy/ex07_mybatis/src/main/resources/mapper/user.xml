@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- <mapper namespace="Mapper_인터페이스_전체경로"> -->
+<mapper namespace="com.example.mybatis.mapper.UserMapper"> <!-- 인터페이스 주소 명시 -->
+
+  <!-- 모든 SELECT 태그는 결과 타입(resultType, resultMap) 명시가 필요합니다. -->
+  <select id="countAll" resultType="long"> <!-- 자바에서 해당 countAll을 찍을 때 사용-->
+    SELECT COUNT(*) FROM users <!--; 붙이면 오류 count 타입: Long (BIGINT 사용했으니까)-->
+  </select>
+
+</mapper>

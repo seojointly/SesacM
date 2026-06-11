@@ -14,6 +14,7 @@ public enum Menu {
 
 // BindingResult를 통해 사용할 수 있다.
 // Error Custom
+// 여기를 최대한 많이 작성
 @Getter
 public enum ErrorCode {
 

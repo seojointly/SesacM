@@ -1,4 +1,4 @@
-package com.example.valid.exception;
+package com.example.mybatis.exception;
 
 import java.util.List;
 import java.util.stream.Collectors;
