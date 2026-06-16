@@ -11,6 +11,12 @@
     <class>com.example.jpa.ex01_entity.User</class>
     <class>com.example.jpa.ex02_persistence_context.Book</class>
     <class>com.example.jpa.ex03_embeddable.Company</class>
+    <class>com.example.jpa.ex04_many_to_one.Category</class>
+    <class>com.example.jpa.ex04_many_to_one.Item</class>
+    <class>com.example.jpa.ex05_one_to_many.Post</class>
+    <class>com.example.jpa.ex05_one_to_many.PostComment</class>
+    <class>com.example.jpa.ex06_bidirection.Order</class>
+    <class>com.example.jpa.ex06_bidirection.OrderItem</class>
   
     <properties>
     <!-- (징)원래는 애플리케이션으로 오는 것임. -->
