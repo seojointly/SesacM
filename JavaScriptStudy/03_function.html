@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+</head>
+
+<body>
+  <script>
+    // 1. 함수 선언식 (반환 타입 작성 없음)
+    fnDeclare(); // 호이스팅 되므로 미리 호출 가능
+
+    function fnDeclare() {
+      console.log('함수 선언식');
+    }
+
+    // 2. 함수 표현식 (함수를 변수에 할당하는 방법, Hoisting 안됨)
+    const fnExpr = function () { // 주로 이름 없는 '익명 함수' 사용
+      console.log('함수 표현식');
+    }
+    fnExpr(); // 만들고 호출해야 함
+
+    // 3. 화살표 함수 (ES6 이후 도입, 익명 함수 간결한 버전 () => {})
+    const fnArrow = () => {
+      console.log('화살표 함수');
+    }
+    fnArrow();
+
+    // 4. ★ 콜백함수 (다른 함수로 어떤 함수를 전달)
+    function login(arg1, arg2) { // arg1 = idCheck, arg2 = pwCheck
+      arg1();
+      arg2();
+    }
+    function idCheck() {
+      console.log('아이디 체크');
+    }
+
+    function pwCheck() {
+      console.log('비밀번호 체크');
+    }
+    login(idCheck, pwCheck); // 1) 함수 전달 (함수 이름을 인자로 사용)
+
+    login(function () { // 2) 함수 전달 (익명함수 자체 전달)
+      console.log('아이디 다시 체크');
+    }, function () {
+      console.log('비밀번호 다시 체크');
+    }); 
+
+    login(() => { // 3) 함수 전달 (화살표 함수 자체 전달)
+      console.log('아이디 다시 다시 체크');
+    }, () => {
+      console.log('비밀번호 다시 다시 체크');
+    })
+  </script>
+</body>
+
+</html>
