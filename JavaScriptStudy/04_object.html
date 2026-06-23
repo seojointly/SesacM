@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+
+<body>
+  <script>
+    // 객체 리터럴 표기법 (중괄호 {})
+    /* Json은 안되지만 JavaScripts에서는 가능한 방법
+    1. "" : 원래 JSON은 "" 필수이나, JavaScripts에서는 안묶어도 됨 (Json으로 쓸거면 "" 해야함) 
+    2. ,  : 후행 쉼표_Trailing Comma 가능 (마지막도 , 넣는 것) 
+    */
+    {
+      const person = { // person이 이름
+        name: "홍길동", // 값 작성
+        age: 30,
+      }
+      // 속성 (프로퍼티: Property)
+      {
+        const car = {
+          model: 'Genesis',
+          price: 5000,
+          'car-maker': 'Hyundai', // (1) 이 경우에는 묶어줘야함
+          year: 2026,
+          owner: {
+            name: '홍길동',
+          },
+        }
+        // Property Value 가져오기
+        // 1. Dot (.): 일반적인 상황
+        console.log(car.model);
+        console.log(car.price);
+        // console.log(car.car-maker); // 은 안됨
+
+        // 2. ★ Bracket([]): 특수한 상황 ((1)Key에 공백 | 하이픈 포함, (2)Key가 변수에 저장된 경우) 
+        console.log(car['model']); // Key값을 문자열로 넣어줘야 정상작동함
+        console.log(car['price']);
+        console.log(car['car-maker']);
+        const key = 'year'; //(2)
+        console.log(car[key]); // (2) 이 경우가 대표적임
+        
+        // ★ 3. Optional Chaining (?.)
+        // 평가 대상이 없으면? (key가 없거나, 객체가 없으면) = 원래 오류가 발생하지만, 오류대신 undefined를 반환하는 방법
+        console.log(car.owner.name);
+        // console.log(car.member.name);
+        console.log(car?.member?.name);
+        // 체이닝 없을 땐
+        console.log(car && car.member && car.member.name);
+      }
+      // ★ Property 다루기
+      // 없는 Key에 값을 할당하면: 새로 생성
+      // 있는 Key에 값을 할당하면: 기존 값 수정
+      const book = {} // 빈 객체
+      book.title = '홍길동전'; // title Property 생성
+      book.title = '소나기'; // title Property 변경
+      console.log(book); // JavaScripts 동적
+    }
+    // Property Shorthand
+    {
+      const zipCode = '12345';
+      const street = '강남대로';
+      
+      // Key, Value 같은 경우 한 번만 작성
+      const address = {
+        zipCode, // zipCode: zipCode, // 특정 변수로 가지고 있는 값을 value로 사용하는 경우 값을 생략함
+        street, // street: street
+      }
+      console.log(address);
+    }
+    // 객체 구조 분해 할당 (Object Destructuring Assignment)
+    {
+      const qna = {
+        q: '한국의 수도는?',
+        a: '서울',
+      }
+      // 원래는 아래와 같이 하나씩 빼야했음 - 레거시
+      // const question = qna.q;
+      // const answer = qna.a;
+
+      // 구조 분해 할당
+      const {q, a} = qna;
+      console.log(q,a);
+
+      const {q: question, a: answer} = qna; // 새 이름으로 할당 (일반적인 경우, 이렇게 잘 안함)
+      console.log(question, answer); 
+
+      // 간단한 연습 (객체를 함수에 전달할 때)
+      function fnPrintUser1(user) { // 1) 레거시 스타일
+        console.log(user.id, user.pw); 
+      }
+      const user1 = {
+        id: 'admin',
+        pw: '1234',
+      }
+      fnPrintUser1(user1);
+
+      function fnPrintUser2({id,pw}) { // 2) 현재 스타일
+        console.log(id, pw); 
+      }
+      const user2 = {
+        id: 'admin',
+        pw: '1234',
+      }
+      fnPrintUser2(user2);
+
+      // 나머지 속성 (Rest Property)
+      // 말 줄임표(...) 사용: 할당 연산자(=) 기준 왼쪽에 배치, 값을 전달받는 쪽
+      const computer = {
+        cpu:'m4',
+        ram: '8g',
+        ssd: '128g',
+      }
+
+      // 구조 분해 할당 시 나머지 속성 사용
+      const { cpu, ...rest } = computer;
+      console.log(cpu); // m4
+      console.log(rest); // {ram: '8g', ssd: '128g'}
+    }
+
+    // ★ 전개 구문 (Spread Syntax) -> 많이 사용함. 공부필수
+    // 말 줄임표(...): 할당 연산자(=) 기준 오른쪽에 배치, 값을 전달하는 쪽
+    {
+      const phone = {
+        model: 'galaxy',
+        size: '5inch',
+      }
+      const smartPhone = {
+        ...phone, // phone 객체의 프로퍼티를 펼침
+        size: '6 inch',
+      }
+      console.log(smartPhone);
+      // 위치가 다름 (전달하는 쪽인지, 받는쪽인지를 구분할 것)
+    }
+    // this
+    // 어떤 함수를 호출하는 주체
+    {
+      function print() {
+        console.log('print 호출: ', this); // this바인딩함.
+      }
+      print(); // 호출하는 건: 전역 객체 (window)
+
+      // 메서드 (객체가 가진 함수)의 this 바인딩
+      const car = {
+        model: 'Ray',
+        drive: function() {
+          console.log('drive:', this);
+          console.log(this.model + ' 타고 드라이브!') // 이게 Ray
+        } 
+      }
+      car.drive(); // 호출하는 건: car 객체
+    }
+
+    // 객체 생성자 함수: 동일 프로퍼티를 가진 여러 객체(템플릿)가 필요할 때 유용함
+    {
+      // 생성자 함수는 PascalCase 권장 (관례)
+      function Office(location) {
+        // this 바인딩: 생성자 함수로 생성하는 객체에 연결됨
+        this.location = location;
+      }
+
+      // 객체 생성: new 연산자로 생성
+      const office1 = new Office('101호');
+      const office2 = new Office('102호');
+      console.log(office1);
+      console.log(office2 instanceof Office); // if문에서 사용하는 것, true
+    }
+
+    // 프로토타입
+    // 모든 객체가 가지는 부모 타입의 객체를 의미함 (java와 비교하자면 Object느낌)
+    // 프로토타입에는 공유 데이터를 넣고 사용함
+    {
+      const number = 10;
+      console.log(number); 
+      /* 객체는 아니지만(원시타입이지만) . 을 찍으면
+      * 자바스크립트가 임시로 Number 객체 로 변환(래핑)해줌
+      * -> Number 프로토타입에 있는 메서드들을 사용할 수 있게 됨
+      */ 
+      const member = {
+        name: 'kim',
+        age: 30,
+      }
+      console.log(member);
+      console.log(member.toString()); // 프로토타입 객체가 지원
+
+      // 프로토타입이 필요한 경우
+      function Coffee(store) {
+        this.store = store;
+        // this.info = function() { // 이 구성은 객체마다 동일한 메서드를 가지므로, 메모리 낭비
+        //   console.log(`${this.store}에서 파는 커피`);
+        // }
+      }
+      // Coffee 생성자 함수의 메서드를 프로토타입에 등록 (공유 영역에 등록)
+      Coffee.prototype.info = function () {
+        console.log(`${this.store}에서 파는 커피`);
+      }
+      const coffee1 = new Coffee('메가');
+      const coffee2 = new Coffee('컴포즈');
+      coffee1.info();
+      coffee2.info();
+      console.log(coffee1)
+    }
+  
+  </script>
+</body>
+</html>

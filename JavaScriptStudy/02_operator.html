@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<body>
+<script>
+  // 일치, 불일치 연산
+  {
+    console.log(10 === '10'); // false
+    console.log(10 !== '10'); // true
+  }
+  // Falsy: Type이 달라도 false로 취급하는 값(값이 없는 경우)
+  {
+    console.log(0 == false); // true
+    console.log('' == false); // true
+    console.log(undefined == false); // false -> undefined는 true로 취급함.
+  }
+
+  // 논리 연산 (&&, ||, !)
+  {
+    let a = ''; // falsy 값
+    console.log(a || 'hello'); // hello -> a가 false이므로 hello를 반환
+    let b = 'world'; // truthy 값
+    console.log(b || 'hello'); // world -> b가 true이므로 world를 반환
+  }
+
+  // null 병합
+  {
+    let a; // undefined (값을 가져본 적이 없음 -> 무슨 타입인지 모름)
+    let b = null; // object (객체타입임을 null로 명시)
+    console.log(typeof a, typeof b);
+    console.log(a ?? 'hello'); // a가 nullish하면 'hello' 사용
+    console.log(b ?? 'world'); // b가 nullish하면 'world' 사용
+  }
+</script>
+</body>
+</html>

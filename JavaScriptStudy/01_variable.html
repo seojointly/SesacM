@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<body>
+  <script>
+    /* var 선언 - 지역변수 상관없이 다 가능 */
+    {
+      var a; // 초기 할당이 없으면 undefined 값을 가짐
+      console.log(a, typeof a);
+
+      var a; // 재 선언 가능
+      a = 10; // number 타입 값 할당
+      console.log(a, typeof a);
+
+      a = 'hello world'; // string 값 할당
+      console.log(a, typeof a);
+    }
+    console.log(a);
+
+    /* let, const 지역변수 개념으로 사용 가능*/
+    {
+      let b; // 초기 할당이 없으면 undefined
+      const c = true; // 초기 할당이 필수 (상수), java -> final
+
+      b = 10;
+      console.log(b);
+      b = 'hello world';
+      console.log(b); // 동적 할당 특징은 그대로 유지
+      // let b; 재선언 불가
+    }
+    // console.log(b); 스코프를 벗어나면 접근 불가
+    // console.log(c); const 도 동일함
+
+    /* Template Literal */
+    {
+      const age = 20;
+      const a = '나는' + age + '살입니다.'; // 연결하기
+      const b = `나는 ${age}살 입니다.`; // ★ 보간법 (expression interpolation)
+      console.log(a, b);
+    }
+
+    /* Hoisting */
+    {
+      money = 1000;
+      console.log(money);
+      var money; // JavaScript 인터프리터가 var 선언부를 가장 먼저 읽어 처리함. -> 이게 가장 위로 감
+
+      console.log(car);
+      var car = 'sonata';
+      console.log(car);
+    }
+  </script>
+
+</body>
+
+</html>
