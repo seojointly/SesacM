@@ -1,0 +1,5 @@
+spring:
+  application:
+    name: boot-app
+  jwt:
+    secret: ${JWT_SECRET_KEY}
