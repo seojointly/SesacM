@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<body>
+<script>
+  // 카트 아이템
+  class CartItem {
+
+    // private 필드
+    #quantity;
+    #price;
+
+    // 생성자
+    constructor(name, quantity = 1, price) {
+      this.name = name; // 일반 프로퍼티
+      // this.#price = price; // private 프로퍼티 직접전달 (# 없을 시 직접전달 X, Setter 거쳐서 전달), 잘못된 값의 대비가 안됨
+      this.price = price; 
+      this.quantity = quantity; // Setter를 거쳐 #quantity에 전달 (권장 방식)
+    }
+    // Getter & Setter
+    get quantity() {
+      return this.#quantity;
+    }
+    set quantity(value) {
+      if (!Number.isInteger(value) || value<1) {
+        console.error('수량은 최소 1개 이상인 정수여야 합니다.')
+        return;
+      }
+      this.#quantity = value;
+    }
+    get price() {
+      return this.#price;
+    }
+    set price(value) {
+      if (value<0) {
+        console.error('가격은 0보다 작을 수 없습니다.');
+        return;
+      }
+      this.#price = value;
+    }
+
+    // 총 가격 반환 메서드
+    getTotalPrice() {
+      return this.#price * this.#quantity // 가격 * 수량 #붙여도, 안붙여도 큰 차이없음(여기서는)
+    }
+
+    // 정보출력 메서드
+    getSummary() {
+      return `${this.name} | 단가: ${this.#price} | 수량: ${this.quantity} | 총가격: ${this.getTotalPrice}` // 여기서도 # 상관없음
+    }
+
+    // 수량 추가 메서드
+    addQuantity(amount) {
+      if (amount<=0) {
+        console.error('추가 수량은 0 이상이어야 합니다.');
+        return;
+      }
+      this.quantity += amount; // Setter 호출함 (quantity 값 변환)
+    }
+  }
+
+  // TEST를 위한 인스턴스(클래스로 만든 객체) 생성 (생성자 호출)
+  const item = new CartItem('TV', 1, 50);
+  console.log(item); // 초기상태 확인
+  
+  item.addQuantity(1);
+  console.log(item); // 초기상태 확인
+
+  item.price = -10 // error message 확인용
+  item.quantity = 1.5 // error message 확인용
+
+  // 할인 카트 아이템
+  class DiscountCartItem extends CartItem {
+
+    // private 프로퍼티
+    #discountRate = 0.5; // 할인율
+
+    // 1. 생성자 구현
+    constructor(name, quantity, price) {
+      super(name, quantity, price);
+      // this.discountRate = discountRate;
+    }
+    // 2. Getter & Setter 구현
+    get discountRate() {
+      return this.#discountRate;
+    }
+
+    // 3. 메서드 오버라이드: getTotalPrice, get Summary()
+    getTotalPrice() {
+      const originalPrice = this.price * this.quantity;
+      return originalPrice * (1-this.#discountRate);
+    }
+      getSummary() {
+        return `${this.name} 50% 세일 | 단가: ${this.price} | 수량: ${this.quantity} | 할인가: ${this.getTotalPrice()}`
+    }
+  }
+  const halfPriceItem = new DiscountCartItem('소금빵', 1, 3000); // 할인율을 입력하지 않음!
+  console.log(halfPriceItem.getSummary());
+
+
+</script>
+</body>
+</html>
