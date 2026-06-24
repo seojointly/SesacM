@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<body>
+  <!-- DOM 취득 -->
+  <h1 id="title" class="title" head-tag>안녕하세요</h1>
+  <h3 id="sub-title" class="title" head-tag>Hello</h3>
+  <script>
+    const title = document.getElementById("title");
+    console.log(title);
+    const subTitle = document.getElementById("sub-title");
+    console.log(subTitle);
+
+    const titleList = document.getElementsByClassName("title");
+    console.log(titleList);
+    for (const element of titleList) {
+      console.log(element);
+    }
+
+    // id 선택자: # 다음 id
+    // class 선택자: . 다음 class
+    const headTags = document.querySelectorAll('.head-tag');
+    console.log(headTags);
+    headTags.forEach(tag => console.log(tag));
+
+    // 정확히 1개가 필요한 경우: getElementById
+    // 여러개가 필요: getElementsByClassName || querySelectorAll
+  </script>
+<!-- DOM Attribute -->
+<div>
+  <input type="text" id="id" class="inp" value="홍길동" readonly>
+</div>
+<script>
+  const id = document.getElementById('id');
+  
+  // Attribute 취득
+  console.log('type:', id.getAttribute('type'));  // "text"
+  console.log('name:', id.getAttribute('name'));  // null (name 속성이 없음)
+  console.log('id:', id.getAttribute('id'));  // "id"
+  console.log('class:', id.getAttribute('class'));  // "inp"
+  console.log('readonly:', id.getAttribute('readonly'));  // "" (readonly 속성의 값이 없음)
+
+  // Attribute 변경
+  //// 1. 기존 value 수정
+  id.setAttribute('value', '김철수'); // 첫번째 arg: 존재하는 속성 (변경할 대상으로 지정) , 두번째 arg: 변경하고싶은 값
+
+  //// 2. 새로운 Attriute 추가
+  id.setAttribute('name', 'username'); // 없는 속성(null값) -> Elements에서 div(구역태그) 확인 가능
+  ///// <input type="text" id="id" class="inp" value="김철수" readonly="" name="username">
+
+  // Attribute 확인
+  if (id.hasAttribute('readonly')) {
+    console.log('읽기 전용 속성');
+  }
+
+  // Attribute 삭제
+  id.removeAttribute('readonly');
+  //// Elements 의 readonly 사라졌는지 확인, 실제 내용 변경가능여부 확인
+
+  // 두가지 다 같은 결과값을 내보냄 (보통 2번째 사용)
+  console.log(id.getAttribute('class')); // 메서드 호출 (항상 비용 ↑)
+  console.log(id.className); // 프로퍼티 접근 (더 빠르고 비용도 절감)
+</script>
+
+<!-- DOM Property -->
+<div>
+  <input type="text" id="name" class="inp" value="홍길동" readonly>
+</div>
+<script>
+  const name = document.getElementById('name');
+  
+  console.log(name.type);  // "text"
+  console.log(name.id);  // "id"
+  console.log(name.className);  // "inp"
+  console.log(name.value);  // "홍길동"
+  console.log(name.readOnly);  // true
+</script>
+
+</body>
+</html>
