@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<body>
+  
+  <button onclick="openNewWindow()">구글 새 창으로 열기</button>
+
+  <script>
+    function openNewWindow() {
+      window.open('https://www.google.com');
+    }
+  </script>
+
+  <hr>
+
+  <div class="timer-container">
+    <button id="startBtn">3초 뒤 알림 시작</button>
+    <button id="cancelBtn">예약 취소</button>
+    <p id="status">상태: 대기 중</p>
+  </div>
+
+  <script>
+  const startBtn = document.getElementById('startBtn');
+  const cancelBtn = document.getElementById('cancelBtn');
+  const statusText = document.getElementById('status');
+
+  let timerId = null;  // 타이머 ID
+
+  // 시작 버튼 클릭
+  startBtn.addEventListener('click', () => {
+    // 이미 실행 중인 타이머가 있다면 먼저 취소 (중복 실행 방지)
+    if (timerId) {
+      clearTimeout(timerId);
+    }
+
+    statusText.innerText = '상태: 3초 뒤 알림이 뜹니다...';
+
+    // setTimeout 실행 후 반환된 ID를 변수에 저장
+    timerId = setTimeout(() => {
+      alert('예약된 알림입니다!');
+      statusText.innerText = '상태: 알림 완료';
+      timerId = null;  // 작업 완료 후 초기화
+    }, 3000);
+  });
+
+  // 취소 버튼 클릭
+  cancelBtn.addEventListener('click', () => {
+    if (timerId) {
+      // 저장해둔 ID를 전달하여 타이머 중단
+      clearTimeout(timerId);
+      timerId = null; // 변수 초기화
+      statusText.innerText = '상태: 알림이 취소되었습니다.';
+    } else {
+      statusText.innerText = '상태: 취소할 예약이 없습니다.';
+    }
+  });
+  </script>
+
+  <hr>
+
+  <button id="btn">클릭하세요</button>
+  <script>
+
+    const btn = document.getElementById('btn');
+
+    btn.addEventListener('click', function(e) {
+      let count = 0;
+      const intervalId = setInterval(() => {
+        count++;
+        console.log(count + '번째 hello');
+        if(count === 10) {
+          clearInterval(intervalId);  // 10번만 반복한 뒤 타이머 취소
+        }
+      }, 1000);
+    })
+
+  </script>
+
+</body>
+</html>
