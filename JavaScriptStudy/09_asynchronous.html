@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<body>
+  
+  <!-- XMLHttpRequest 비동기 객체 -->
+  <form id="agify-form">
+    <label for="name">이름</label>
+    <input type="text" id="name">
+    <button type="submit">제출</button>
+  </form>
+  <div id="agify-result">여기에 결과가 노출됩니다.</div>
+  <script>
+    const agifyForm = document.getElementById('agify-form');
+    agifyForm.addEventListener('submit', e => {
+      e.preventDefault(); // 폼 제출은 동기 처리 방식(새로고침으로 전체 화면을 reloading하는 방식)이므로, 비동기 요청 시 항상 취소해야함.
+      // 비동기요청
+      const xhr = new XMLHttpRequest();
+      xhr.open('get', `https://api.agify.io/?name=${document.getElementById('name').value}`); // get 방식(요청 메서드) -> 주소창을 위한 메서드
+      xhr.addEventListener('readystatechange', () => {
+        if(xhr.readyState === 4) {
+          if(xhr.status === 200) {
+            const result = xhr.responseText // 응답 결과가 JSON인 경우 "JSON 문자열"로 받아옴
+            const obj = JSON.parse(result) //JSON 문자열 -> 자바스크립트 객체로 변환
+            document.getElementById('agify-result').textContent = `count=${obj.count}, name=${obj.name}, age=${obj.age}`;
+          }
+        }
+      })
+      xhr.send();
+    })
+  </script>
+
+  <!-- Promise 객체 -->
+  <button id="btn">요청</button>
+  <script>
+    document.getElementById('btn').addEventListener('click', e => {
+      let result; // undefined 상태
+
+      // 비동기 1
+      const xhr = new XMLHttpRequest();
+      xhr.open('get', 'https://jsonplaceholder.typicode.com/todos/1');
+      xhr.addEventListener('readystatechange', () => {
+        if (xhr.readyState === 4) {
+          if (xhr.status === 200) {
+            const {title} =JSON.parse(xhr.responseText); // 객체 구조 분해 할당
+            result = title;
+          }
+        }
+      })
+      xhr.send();
+      //  비동기 2 <- 그래서 답 올때까지 기다리지 않고 undefined 찍힘
+      console.log(result);
+    })
+  </script>
+  <script>
+
+    // Promise 도입
+
+    // 1. Promise 생성 (Promise를 생성한 뒤 반환하는 함수)
+    // function fetchData(todoId) { -> 1차
+    function fetchData(url) {
+      return new Promise((resolve, reject) => {
+      const xhr = new XMLHttpRequest();
+      // xhr.open('get', `https://jsonplaceholder.typicode.com/todo/${todoId}`); -> 1차
+      xhr.open('get', `${url}`);
+      xhr.addEventListener('readystatechange', () => {
+        if (xhr.readyState === 4) {
+          if (xhr.status === 200) {
+            // 약속 이행 (fulfilled) 
+            resolve(JSON.parse(xhr.responseText)); // 객체 구조 분해 할당
+          } else {
+            // 약속 거부 (reject) // 실패
+            reject(new Error(`요청 실패(상태코드: ${xhr.status})`));
+          }
+        }
+      });
+      xhr.send();
+      });
+    }
+
+    // 2. Promise 소비 (함수의 반환 값을 받아서 소비)
+    document.getElementById('btn').addEventListener('click', e => {
+      fetchData('https://jsonplaceholder.typicode.com/todos/1') // promise 받아옴
+      .then(obj => {
+        console.log('API응답데이터:' ,obj)
+      }) // 성공
+      .catch((error) => {
+        console.error(error.message);
+      }) // 실패
+    })
+  </script>
+
+<!-- Fetch API: fetch() 함수 -->
+  <div>
+    <select id="sel">
+      <option value="cat">고양이</option>
+      <option value="dog">강이지</option>
+    </select>
+    <button id="btn2">요청</button>
+    <div id="result-image"></div>
+  </div>
+  <script>
+    // document.getElementById('btn2').addEventListener('click', e => {
+    //   const myPromise = fetch(`https://api.the${document.getElementById('sel').value}api.com/v1/images/search`);
+    //   console.log(myPromise);
+
+    //   myPromise
+    //   .then(response => {
+    //     // console.log(response.json());
+    //     if(!response.ok) { // if else 로 에러처리를 하는 것은 안티패턴임
+    //       throw new Error(`에러 발생(상태코드: ${response.status})`);
+    //     }
+    //     return response.json();
+    //   })
+    //   .then(json => {
+    //       console.log(json);
+    //     })
+    //     .catch(error => console.error(error.message));
+    // }) -> 밑 코드와 비교
+
+      document.getElementById('btn2').addEventListener('click', e => {
+      fetch(`https://api.the${document.getElementById('sel').value}api.com/v1/images/search`) 
+        .then(response => response.json())
+        .then(json => {
+          console.log(json);
+          const {id, url, width, height} = json[0];
+          const result = `<img src="${url}" width="${width}" alt="개나고양이">`;
+          document.getElementById('result-image').innerHTML = result;
+        });
+      })
+  </script>
+
+  <!-- async 함수와 await문 -->
+  <button id="btn3">요청</button>
+  <script>
+    document.getElementById('btn3').addEventListener('click', e => {
+      fetchUser();
+    })
+
+    async function fetchUser() { // async를 사용함으로써 비동기 처리 함수임을 명시
+      // Todo 요청
+      const res1 = await fetch('https://jsonplaceholder.typicode.com/todos/1'); // 비동기지만 기다려라
+      const todo = await res1.json();
+      // User 요청
+      const res2 = await fetch(`https://jsonplaceholder.typicode.com/users/${todo.userId}`);
+      const user = await res2.json();
+
+      console.log(user);
+    }
+  </script>
+</body>
+</html>
