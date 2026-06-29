@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <script crossorigin src="https://unpkg.com/react@18/umd/react.development.js"></script>
+  <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+  <title>Document</title>
+</head>
+<body>
+  
+<div id="root1"></div>
+<script type="text/babel">
+  
+  // 클래스형 컴포넌트 (React.Component 상속) -> 안쓸것임. 그냥 학습용
+  class ClassComp extends React.Component {
+    // render 메서드를 만들어서 그림을 그리는 방식
+    /** @returns {React.ReactNode} */ //반환타입 메서드에 작성
+    render() {
+      return <h1>Class Component</h1> // 그리고 싶은 것을 return 해줌
+    }
+  }
+
+  // 컴포넌트 렌더링: 컴포넌트를 태그 형식으로 작성하는 것
+  ReactDOM.createRoot(document.getElementById('root1')).render(<ClassComp/>);
+
+</script>
+
+<div id="root2"></div>
+<script type="text/babel">
+
+  // 함수형 컴포넌트 (단일 JSX 반환) -> return 하라는 뜻, 여러개의 Element가 있어도 하나로 묶어서 보내야 함 (함수표현식(함수를 변수에 담는 것) -> 최신 문법)
+
+  /** @type {React.FC} */
+  const FunctionComp = () => {
+    return(
+      <>
+        <h1>Function Component</h1>
+      </>
+    );
+  }
+  ReactDOM.createRoot(document.getElementById('root2')).render(<FunctionComp/>);
+</script>
+
+<div id="root3"></div>
+<script type="text/babel">
+
+  // 컴포넌트 합성: 컴포넌트 안에 컴포넌트 넣기
+
+  // 1. 내부 컴포넌트
+  /** @type {React.FC} */
+  const InnerComp = () => {
+    return (
+      <h1>Inner Component</h1>
+    );
+  }
+  
+  // 2. 외부 컴포넌트(렌더링할 컴포넌트)
+  /** @type {React.FC}*/
+  const OuterComp = () => {
+    return (
+      <>
+        <InnerComp/>
+        <InnerComp/>
+      </>
+    );
+  }
+  ReactDOM.createRoot(document.getElementById('root3')).render(<OuterComp/>);
+</script>
+
+</body>
+</html>
