@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <script crossorigin src="https://unpkg.com/react@18/umd/react.development.js"></script>
+  <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+  <title>Document</title>
+</head>
+<body>
+  
+<div id="root1"></div>
+<div id="root2"></div>
+<script type="text/babel">
+  
+    // ====== 1. 기본 배열 렌더링 ======== // 
+    {
+      /** @type {React.FC<{items: string[]}>} */
+      const ListComp = ( { items } ) => {
+        return (
+          <ul>
+            {
+              items.map((item, i) => (<li key={i}>{item}</li>)) // 괄호로 묶어도 되고
+              // items.map((item, i) => <li key={i}>{item}</li>) // 안묶어도 됨.
+            }
+          </ul>
+        );
+      }
+
+      /** @type {string[]} */ //string 배열타입임을 명시
+      const names = ["tom", "jessica", "alice"];
+      ReactDOM.createRoot(document.getElementById('root1')).render(<ListComp items={names}/>);
+    }
+
+    // ====== 2. 하위 컴포넌트 분할 배열 렌더링 ======== // 
+    {
+      // 객체 데이터 타입 정의
+      /** 
+       * @typedef {Object} UserItem
+       * @property {number} id
+       * @property {string} name 
+       */
+      
+      /** @type {React.FC<{data: UserItem}>} */
+      const ListItemComp = ({ data }) => {
+        return <li>{data.name}</li>;
+      }
+
+      /** @type {React.FC<{items: UserItem[]}>} */
+      const ListComp = ({ items }) => {
+        return(
+          <ul>
+            {
+              list.map( item => <ListItemComp key={item.id} data={item} /> ) // index는 선택값, 실무방식에 가까움 (데이터 자체의 고유 ID를 Key로 사용)
+            }
+          </ul>
+        );
+      }
+
+      /** @type {UserItem[]} */
+      const list = [
+        {id: 1, name: 'tom'},
+        {id: 2, name: 'jessica'},
+        {id: 3, name: 'alice'},
+      ]
+      ReactDOM.createRoot(document.getElementById('root2')).render(<ListComp items={list}/>);
+    }
+</script>
+
+</body>
+</html>

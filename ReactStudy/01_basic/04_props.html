@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <script crossorigin src="https://unpkg.com/react@18/umd/react.development.js"></script>
+  <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+  <title>Document</title>
+</head>
+<body>
+  
+<div id="root1"></div>
+<div id="root2"></div>
+<div id="root3"></div>
+<div id="root4"></div>
+<div id="root5"></div>
+
+<script type="text/babel">
+  
+  // ====== 1. props 기본 개념 ======== // 
+
+  // props type
+  /**
+   * @typeof {Object} NameCardProps // 객체타입
+   * @property {string} name
+   * @property {string} phone
+   */
+  
+  /** @type {React.FC<NameCardProps>} */ // 제네릭처리해서 props의 타입을 적어줘야함 -> <>
+  const NameCard1 = (props) => { // props객체에 name, phone 프로퍼티가 전달됨 //받는 쪽임. props 는 객체, name이라는 프로퍼티가 전달된 것. // 비추천
+    return (
+      <>
+        <div>이름 {props.name}</div> 
+        <div>전화 {props.phone}</div>
+      </>
+    );
+  }
+  /** @type {React.FC<NameCardProps>} */ // 제네릭처리해서 props의 타입을 적어줘야함 -> <>
+  const NameCard2 = ({name, phone}) => { // 전달된 프로퍼티를 객체 구조 분해 할당으로 받음 (실무 표준에 가까움)
+    return (
+      <>
+        <div>이름 {name}</div> 
+        <div>전화 {phone}</div>
+      </>
+    );
+  }
+
+
+  /** @type {React.FC<NameCardProps>} */ 
+  const NameCard3 = ({name="jessica", phone="010-0000-9999"}) => { // 디폴트 매개변수
+    return (
+      <>
+        <div>이름 {name}</div> 
+        <div>전화 {phone}</div>
+      </>
+    );
+  }
+
+    /** @type {string} */
+  const userName = 'min';
+  /** @type {string} */
+  const userPhone = '010-1234-5678';
+
+
+  ReactDOM.createRoot(document.getElementById('root1')).render([
+    <NameCard1 name={userName} phone={userPhone} />, // 컴포넌트로 name, phone 프로퍼티를 전달함 // userName 과 userPhone 을 전달하는 방법. (전달하고싶은 것을 속성형태로 만들 수 있음) -> 보내는 쪽(던지는 쪽)임.name이라는 프로퍼티로 userName을 넘기는 것. 컴포넌트로 넘긴 프로퍼티를 받을 때에는 props로 받음.
+    <NameCard2 name={"alice"} phone={"010-9876-5432"} />, // name="alice"도 가능
+    <NameCard3 />,
+  ]);
+
+
+    // ====== 2. props drilling: 하위 컴포넌트로 프로퍼티를 계속 전달하는 것을 의미 ======== // 
+    // 안좋은 코드 구성임. 나중에 변경하기 위한 설명 -> 보통은 상태관리로 함.
+    // 상태관리 1) Context API 
+    // 상태관리 2) = 외부 라이브러리 불러와서 Zustand, Redux Toolkit 등으로 처리하는 방식이 있고 다른 방식이 있음
+
+    // props type
+    /** @typeof {Object} DrillingProps 
+     * @property {string} data
+    */
+  
+    /** @type {React.FC<DrillingProps>} */ // 함수형 컴포넌트 생성
+    const CompThree = ({ data }) => {
+      return(
+        <>
+          <div>CompThree: {data}</div>
+        </>
+      );
+    }
+
+    /** @type {React.FC<DrillingProps>} */ // 함수형 컴포넌트 생성
+    const CompTwo = ({ data }) => {
+      return(
+        <>
+          <div>CompTwo: {data}</div>
+          <CompThree data={data} /> {/* 하위 컴포넌트로 값을 그대로 넘기는 것: Drilling */}
+        </>
+      );
+    }
+
+    /** @type {React.FC<DrillingProps>} */ // 함수형 컴포넌트 생성
+      const CompOne = ({ data }) => {
+        return(
+          <>
+          <div>CompOne: {data}</div>
+          <CompTwo data={data} /> {/* 하위 컴포넌트로 값을 그대로 넘기는 것: Drilling */}
+          </>
+        );
+      }
+      
+      // 화면에 렌더링 할 컴트넌트
+      /** @type {React.FC} */
+      const App = () => {
+
+        // 컴포넌트로 전달할 데이터 선언
+        /** @type {String} */
+        const data = 'Hello World';
+        return (
+          <CompOne data={data} />
+        );
+      }
+
+      ReactDOM.createRoot(document.getElementById('root2')).render(<App/>);
+      
+
+    // ====== 3. props children: 컴포넌트 내부 요소 ======== // 
+
+    // props type
+    /** 
+     * @typeof {Object} ChildrenProps
+     * @property {React.ReactNode} children
+    */
+
+    /** @type {React.FC<ChildrenProps>} */
+    const GiftCard1 = (props) => { // 실무: props를 to로 바꿔서 씀
+      return(
+        <p>{props.children}</p>
+      );
+    }
+
+    /** @type {React.FC<ChildrenProps>} */
+    const GiftCard2 = ({ children }) => { // 실무: props를 to로 바꿔서 씀
+      return(
+        <p>{children}</p>
+      );
+    }
+
+    ReactDOM.createRoot(document.getElementById('root3')).render([
+      <GiftCard1>5만원</GiftCard1>, // 태그 내부요소 전달 (컴포넌트를 구성하는 내부 요소 = children 으로 받음)
+      <GiftCard2><strong>10만원</strong></GiftCard2>, // 요소 전달 가능
+    ]);
+</script>
+
+</body>
+</html>

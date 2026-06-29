@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <script crossorigin src="https://unpkg.com/react@18/umd/react.development.js"></script>
+  <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+  <title>Document</title>
+</head>
+<body>
+  
+
+<script type="text/babel">
+  // /** @type {any} */
+  const globalWindow = window;
+  const { React, ReactDOM } = globalWindow;
+</script>
+
+<div id="root1"></div>
+<script type="text/babel">
+
+  // JSX를 이용한 Element 만들기
+  /** @type {React.ReactElement} */
+  const h1Element = <h1>Hello World</h1>; // 직접 실행 X, Babel등의 트랜스파일러에 의해 React.createElement()로 변환 된 뒤 실행됨. -> createElement를 우리가 수행하지 않고, Babel이 수행할 예정.
+
+  // root1에 그리는 코드 작성
+  /** @type {HTMLElement} */
+  const root1 = document.getElementById('root1');
+  ReactDOM.createRoot(root1).render(h1Element);
+
+</script>
+<div id="root2"></div>
+<script type="text/babel">
+
+  // 여러 태그를 단일 태그로 구성하기
+  const div1 = <React.Fragment>
+    <div>안녕하세요</div>
+    <div>반갑습니다</div>
+  </React.Fragment>
+
+    const div2 = <>
+      <div>헬로</div>
+      <div>봉쥬르</div>
+    </>
+  /** @type {HTMLElement} */
+  const root2 = document.getElementById('root2');
+  ReactDOM.createRoot(root2).render([div1, div2]);
+
+</script>
+
+<div id="root3"></div>
+<script type="text/babel">
+
+  // JSX 표현식, 주석: 중괄호 { } -> 태그로 만들어 둔 것. 여러개 쓰면 <> 로 묶음.
+
+  /** @type {number}*/
+  const radius = 3.5; // timescripts에서는 numbers라는 타입을 가짐
+  // const radius = /** @Type */ 3.5; // 이렇게도 쓸 수 있음
+
+  /** @type {React.ReactElement} */
+  const circle = <>
+    <p id="radius" className="circle">반지름: {radius}</p> 
+    <p id="area" className="circle">넓이: {Math.PI * Math.pow(radius, 2)}</p> 
+    {
+      // 슬래시 2개 (single line comment)는 중괄호와 다른 줄에 작성합니다.
+    }
+  </>
+
+  /** @type {HTMLElement} */
+  const root3 = document.getElementById('root3');
+  ReactDOM.createRoot(root3).render(circle);
+
+</script>
+
+<div id="root4"></div>
+<script type="text/babel">
+
+  // JSX 특징: JSX 에서는 반드시 셀프 클로징 시 (/)를 붙여야 함.
+  // <hr/>, <input type="text" /> 등
+
+  /** @type {React.ReactElement} */
+  const inputElement = <input type="text" />
+
+  /** @type {HTMLElement} */
+  const root4 = document.getElementById('root4');
+  ReactDOM.createRoot(root4).render(inputElement);
+
+</script>
+
+<div id="root5"></div>
+<script type="text/babel">
+
+  // 논리 연산자 + 삼항 연산자를 활용한 조건부 렌더링
+
+  /** @type {boolean} */
+  const condition = false;
+
+  /** @type {React.ReactElement} */
+const coditionElement = (
+  <>
+    { condition ? <h1>true</h1> : <h1>false</h1> }
+    { condition && <h1> 나는 나옵니까?(true인 경우 나옴, false인 경우 안나옴)</h1> }
+    { condition || <h1> 나는 나오나요?(false인 경우 나옴, true인 경우 안나옴)</h1> }
+  </>
+)
+  /** @type {HTMLElement} */
+  const root5 = document.getElementById('root5');
+  ReactDOM.createRoot(root5).render(coditionElement);
+
+</script>
+
+</body>
