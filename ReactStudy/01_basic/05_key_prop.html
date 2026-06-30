@@ -23,6 +23,7 @@
             {
               items.map((item, i) => (<li key={i}>{item}</li>)) // 괄호로 묶어도 되고
               // items.map((item, i) => <li key={i}>{item}</li>) // 안묶어도 됨.
+              // map 꼭 쓰니까 알아두어야 함. -> map이 JSX 문법에 의해 태그로 변경
             }
           </ul>
         );
@@ -52,7 +53,7 @@
         return(
           <ul>
             {
-              list.map( item => <ListItemComp key={item.id} data={item} /> ) // index는 선택값, 실무방식에 가까움 (데이터 자체의 고유 ID를 Key로 사용)
+              list.map( item => <ListItemComp key={item.id} data={item} /> ) // index는 선택값, 실무방식에 가까움 (데이터 자체의 고유 ID를 Key로 사용) -> 실무에 가까움.
             }
           </ul>
         );
