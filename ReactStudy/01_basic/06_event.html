@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <script crossorigin src="https://unpkg.com/react@18/umd/react.development.js"></script>
+  <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+  <title>Document</title>
+</head>
+<body>
+  
+<div id="root1"></div>
+<div id="root2"></div>
+<div id="root3"></div>
+<script type="text/babel">
+  
+  // ====== 1. 인라인 콜백 익명 함수 ======== // 
+
+  /** @type {React.FC} */
+  const EventComp1 = () => {
+    return (
+      // 익명함수를 넣어 함수처리로 진행_() =>  alert('클릭했다.')
+      <button onClick={() =>  alert('클릭했다.')}>클릭하세요</button>
+    )
+  }
+
+  // 렌더링코드
+  ReactDOM.createRoot(document.getElementById('root1')).render(<EventComp1/>)
+
+  // ====== 2. 내부 핸들러 분리 (실무 표준) ======== // 
+  /** @type {React.FC} */
+  const EventComp2 = () => {
+    
+    // 클릭 이벤트 핸들러 정의
+    // 1. 누구를 클릭하는가? 버튼(HTMLByttonElement)
+    // 2. 마우스 클릭 이벤트 타입은? React.MouseEvent
+
+    /** @param {React.MouseEvent<HTMLButtonElement>} e */
+    const onClickHandler = (e) => {
+      alert(e.target.textContent); // 이벤트 대상(클릭한 버튼 - e.target)의 내부 텍스트(textContent)
+    }
+    return(
+      <button onClick={onClickHandler}>클릭하세요</button>
+    )
+  }
+  ReactDOM.createRoot(document.getElementById('root2')).render(<EventComp2/>);
+
+    // ====== 3. 핸들러를 컴포넌트로 전달하기 ======== // 
+    /** @type {React.FC<{type: string, id: string>} */
+    const InputField = ({ type, id }) => {
+      return <input type ={type} id={id} />;
+    }
+
+    // Button 컴포넌트 (<Button> 반환)
+    // Button props 타입 정의
+    /**
+     * @typeof {Object} ButtonProps
+     * @property {"submit" | "reset" | "button" } type // 타입이 정해져있는 경우 명시 (string X)
+     * @property {(e: React.MouseEvent<HTMLButtonElement>) => void} onClick // 타입스크립트 공부
+     * @property {React.ReactNode} children
+     */
+    /** @type {React.FC<ButtonProps>} */
+    const Button = ({type, onClick, children}) => {
+      return <button type={type} onClick={onClick}>{children}</button>;
+    }
+
+    // Form 컴포넌트 (<form> 반환. 내부에서 InputField, Button 컴포넌트 사용)
+    /* @type {React.FC} */
+    const Form = () => {
+
+      /** @type {string} */
+      const searchId = "search";
+
+      // 클릭 이벤트 핸들러 생성
+      const handleClick = () => {
+        /** @type {HTMLElement} */
+        const inputElement = document.getElementById("search");
+        if(inputElement && inputElement.value === '') {
+          alert('검색 취소합니다.')
+          return;
+        }
+        // 검색을 위한 API 호출 
+      }
+
+      return(
+        /** @param {React.FormEvent<HTMLFormElement>} e */
+        <form onSubmit={(e) => {
+          e.preventDefault(); // ★ 서브밋 동작 방지 (새로고침 방지)
+        }}>
+        <InputField type={"text"} id={"search"} />
+        <Button type={"submit"} onClick={handleClick}>제출</Button>
+        </form>
+      );
+    }
+      ReactDOM.createRoot(document.getElementById('root3')).render(<Form/>);
+  // 보낼 땐 handleClick, 받을 땐 onClick
+</script>
+
+</body>
+</html>

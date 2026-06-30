@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <script crossorigin src="https://unpkg.com/react@18/umd/react.development.js"></script>
+  <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+  <title>Document</title>
+</head>
+<body>
+  
+<div id="root1"></div>
+<div id="root2"></div>
+<div id="root3"></div>
+<script type="text/babel">
+  // ====== 1. 의존 배열이 없는 경우: 렌더링할 때마다 useEffect 동작함 ======== // 
+  /** @type {React.FC} */
+  const CurrentTime1 = () => {
+
+    // 현재 시간을 state로 관리
+    /** @type {[string, (value: string) => void]} */
+    const [currentTime, setCurrentTime] = React.useState(new Date().toLocaleTimeString());
+
+    // useEffect
+    React.useEffect(() => {
+      alert(currentTime);
+    })
+
+    // 버튼 클릭 이벤트 핸들러 (시간을 확인할 때 누르는 버튼)
+    /** @param {React.MouseEvent<HTMLButtonElement>} e */
+      const handleClick = (e) => {
+        setCurrentTime(new Date().toLocaleDateString());
+      }
+
+      return (
+        <button onClick={handleClick}>현재시간확인</button>
+      );
+  }
+  // ReactDOM.createRoot(document.getElementById('root1')).render(<CurrentTime1/>);
+  // ====== 2. 의존 배열이 비어있는 경우: 최초 1회만 동작 ======== // 
+
+  // API로부터 가져오는 데이터 객체 구조 정의
+  /**
+   * @typedef {Object} User
+   * @property {number} id
+   * @property {string} name
+   * @property {string} email
+   */
+
+    /** @type {React.FC} */
+    const UserList = () => {
+      // 상태 정의 (User[], 로딩 여부)
+      const [users, setUsers] = React.useState([]);
+      const [loading, setLoading] = React.useState(true);
+
+      // 최초 렌더링 시 User[] 가져와서 상태 users에 저장, 로딩 완료 처리
+      React.useEffect(() => {
+        // API 요청
+        fetch('https://jsonplaceholder.typicode.com/users')
+          .then(response => response.json())
+          .then(json => {
+            setUsers(json);
+            setLoading(false); // 로딩 끝 (API 요청 성공 시 종료)
+          })
+          .catch(error => {
+            console.error('데이터 로드 실패: ', error);
+            setLoading(false); // 로딩 끝 (API 요청 실패 시 종료)
+          })
+      }, []); // 의존 배열이 비어 있어 최초 1회만 네트워크 요청함. (fetch이용)
+
+      // return (조건부 렌더링)
+      if (loading) { // 초기값 true, 패치 완료 X (데이터 아직 안가져왔으면)
+        return <h1>데이터 가져오는 중...</h1>
+      }
+
+      // return (정상)
+      return (
+        <>
+          <h1>사용자 목록</h1>
+          <ul>
+            {
+              users.map(user => ( // return 생략
+                // {/*<UserItemList key={} user={user} />*/} 권장사항
+                <li key={user.id}>
+                  <h3>이름:{user.name}</h3>
+                  <p>이메일: {user.email}</p>
+                </li>
+              )) 
+            }
+          </ul>
+        </>
+      )
+    }
+    // ReactDOM.createRoot(document.getElementById('root2')).render(<UserList/>);
+  // ====== 3. 의존 배열이 값을 가진 경우: 최초 렌더링 and 값이 변하는 경우 동작 ======== // 
+  const PostList = () => {
+    // 상태 (Post[], 로딩여부, page)
+    const [posts, setPosts] = React.useState([]);
+    const [loading, setLoading]=React.useState(true);
+    const [page, setPage] = React.useState(1);
+
+    // API 요청 (최초 렌더링, page 변할 때)
+    React.useEffect(() => {
+      fetch(`https://jsonplaceholder.typicode.com/posts?_page=${page}`)
+        .then(response => response.json())
+        .then(json => {
+          setPosts(json);
+          setLoading(false);
+        })
+        .catch(error => {
+          console.error('데이터 로드 실패: ', error);
+          setLoading(false);
+        })
+    }, [page]);
+
+    // return (삼항 연산자 조건부 렌더링)
+    return (
+      <>
+        <h1>게시글 목록(현재 {page}페이지)</h1>
+        {
+          loading ? (
+            <h1>데이터 가져오는중</h1>
+          ) : (
+            <ul>
+              {
+                posts.map(post => (
+                  <li key={post.id}>
+                    <h3>제목: {post.title}</h3>
+                    <p>{post.body}</p>
+                  </li>
+                ))
+              }
+            </ul>
+          )
+        }
+      <div>
+          <button onClick={() => setPage(page - 1)} disabled={page === 1}>이전</button>
+          <button onClick={() => setPage(page + 1)} disabled={page === 10}>다음</button>
+        </div>
+      </>
+    )
+  }
+  ReactDOM.createRoot(document.getElementById('root3')).render(<PostList/>);
+</script>
+
+</body>
+</html>

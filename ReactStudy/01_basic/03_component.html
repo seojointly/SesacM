@@ -14,6 +14,11 @@
 <script type="text/babel">
   
   // 클래스형 컴포넌트 (React.Component 상속) -> 안쓸것임. 그냥 학습용
+  /* 사용이유
+  * 1. 생명주기별 메서드 호출해서 작업 가능함.
+  * 2. 상태값을 변환할 때 지원해줌 (state 관리)
+  * -> 근데 현재는 훅 개발되어 잘 사용하지 않음.
+  */
   class ClassComp extends React.Component {
     // render 메서드를 만들어서 그림을 그리는 방식
     /** @returns {React.ReactNode} */ //반환타입 메서드에 작성
@@ -30,7 +35,11 @@
 <div id="root2"></div>
 <script type="text/babel">
 
-  // 함수형 컴포넌트 (단일 JSX 반환) -> return 하라는 뜻, 여러개의 Element가 있어도 하나로 묶어서 보내야 함 (함수표현식(함수를 변수에 담는 것) -> 최신 문법)
+  // 함수형 컴포넌트 (단일 JSX 반환) -> return 하라는 뜻
+  /*
+  * 여러개의 Element가 있어도 하나로 묶어서 보내야 함 (함수표현식(함수를 변수에 담는 것) -> 최신 문법)
+  * 반드시 1개로만 해야함.
+  */
 
   /** @type {React.FC} */
   const FunctionComp = () => {

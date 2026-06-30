@@ -28,7 +28,8 @@
    */
   
   /** @type {React.FC<NameCardProps>} */ // 제네릭처리해서 props의 타입을 적어줘야함 -> <>
-  const NameCard1 = (props) => { // props객체에 name, phone 프로퍼티가 전달됨 //받는 쪽임. props 는 객체, name이라는 프로퍼티가 전달된 것. // 비추천
+  const NameCard1 = (props) => { // props객체에 name, phone 프로퍼티가 전달됨 
+  // 받는 쪽임. props 는 객체(매개변수), name이라는 프로퍼티가 전달된 것. // 비추천
     return (
       <>
         <div>이름 {props.name}</div> 
@@ -64,7 +65,8 @@
 
 
   ReactDOM.createRoot(document.getElementById('root1')).render([
-    <NameCard1 name={userName} phone={userPhone} />, // 컴포넌트로 name, phone 프로퍼티를 전달함 // userName 과 userPhone 을 전달하는 방법. (전달하고싶은 것을 속성형태로 만들 수 있음) -> 보내는 쪽(던지는 쪽)임.name이라는 프로퍼티로 userName을 넘기는 것. 컴포넌트로 넘긴 프로퍼티를 받을 때에는 props로 받음.
+    <NameCard1 name={userName} phone={userPhone} />, // 컴포넌트로 name, phone 프로퍼티를 전달함 
+    // userName 과 userPhone 을 전달하는 방법. (전달하고싶은 것을 속성형태로 만들 수 있음) -> 보내는 쪽(던지는 쪽)임.name이라는 프로퍼티로 userName을 넘기는 것. 컴포넌트로 넘긴 프로퍼티를 받을 때에는 props로 받음.
     <NameCard2 name={"alice"} phone={"010-9876-5432"} />, // name="alice"도 가능
     <NameCard3 />,
   ]);

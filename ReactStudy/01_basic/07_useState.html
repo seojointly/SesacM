@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <script crossorigin src="https://unpkg.com/react@18/umd/react.development.js"></script>
+  <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+  <title>Document</title>
+</head>
+<body>
+  
+<div id="root1"></div>
+<div id="root2"></div>
+<script type="text/babel">
+  
+  // ====== 1. 기본 useState 활용 ======== // 
+  /** @type {React.FC} */
+  const Counter = () => {
+
+    // useState (모든 훅은 컴포넌트 최상위 레벨에 배치한다 (하위 X))
+    /** @type {[number, (value: number) => void]} */
+    const [myState, setMyState] = React.useState(0);
+
+    // 증가 버튼 이벤트 핸들러
+    /** @param {React.MouseEvent<HTMLButtonElement>} e*/
+    const handleIncrement = (e) => {
+      // myState = myState + 1; // (불가) 상태 변경은 반드시 상태 변경 함수를 사용해야 함.
+      // setMyState(myState + 1);               // (가능) 값 전달 방법 -> 놓칠 수 있음
+      setMyState(prevState => prevState + 1);  // (가능) 콜백 전달(함수 전달): 실무 표준 -> 안놓침
+    }
+
+    return (
+      <>
+        <h1>{myState}</h1>
+        <button onClick={handleIncrement}>+</button>
+      </>
+    )
+  }
+  ReactDOM.createRoot(document.getElementById('root1')).render(<Counter/>);
+  // State로 해야 화면에 값이 변동되는 것임.
+
+    // ====== 2. 입력 상자와 useState ======== // 
+
+    /** @type {React.FC} */
+    const InputComponent = () => { 
+
+      /** @type {[string, (value: string) => void]} */
+      const [inputValue, setInputValue] = React.useState('');
+
+      // 입력 상자에 입력한 내용이 변하면 발생하는 이벤트 핸들러 (onChange) (입력할 때마다 곧바로 반응)
+      /** @param {React.ChangeEvent<HTMLInputElement>} e */
+        const handleChange = (e) => {
+          setInputValue(e.target.value);
+        }
+        return (
+          <>
+            <h1>{inputValue}</h1>
+            <input type={"text"} value={inputValue} onChange={handleChange} />
+          </>
+        )
+    }
+    ReactDOM.createRoot(document.getElementById('root2')).render(<InputComponent/>);
+</script>
+
+</body>
+</html>
