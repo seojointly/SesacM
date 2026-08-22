@@ -1,0 +1,9 @@
+# config\my-config.yaml
+
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: my-config
+data:
+  MY_NAME: "Jane Doe"
+  MY_AGE: "50"

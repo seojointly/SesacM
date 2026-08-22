@@ -1,0 +1,23 @@
+# config\cm-volume.yaml
+
+apiVersion: v1
+kind: ConfigMap
+metadata: 
+  name: cm-volume
+  namespace: default
+data: 
+  # Key = 파일이름, value = 파일 내용
+  index.html: |
+    <!DOCTYPE html>                      
+        <html>
+        <head>
+          <title>Welcome to My Nginx V1</title>
+        </head>
+        <body>
+          <h1>Hello, ConfigMap</h1>
+          <p>Using Volume Mount</p>
+        </body>
+        </html>
+  info.txt: | 
+    Version: v1.0.0
+    Environment: Dev

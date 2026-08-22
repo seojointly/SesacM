@@ -1,0 +1,28 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: init-web
+spec:
+  initContainers:
+    - name: create-index
+      image: busybox
+      command: 
+        - sh
+        - -c
+        - echo "<h1>Hello Init Container</h1>" > /work/index.html
+      volumeMounts:
+        - name: work
+          mountPath: /work
+
+  containers: 
+    - name: nginx
+      image: nginx:alpine
+      ports:
+        - containerPort: 80
+      volumeMounts:
+        - name: work
+          mountPath: /usr/share/nginx/html
+  
+  volumes: 
+    - name: work
+      emptyDir: {}

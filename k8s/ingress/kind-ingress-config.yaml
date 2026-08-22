@@ -1,0 +1,20 @@
+# ~/k8s/ingress/kind-ingress-config.yaml
+ 
+kind: Cluster
+apiVersion: kind.x-k8s.io/v1alpha4
+nodes:
+  - role: control-plane   # 쿠버네티스 관리
+  - role: worker          # 앱 실행 및 Ingress 트래픽 수신 노드
+    kubeadmConfigPatches:
+      - |
+        kind: JoinConfiguration
+        nodeRegistration:
+          kubeletExtraArgs:
+            node-labels: "ingress-ready=true" # Ingress 스케줄링 대상 라벨
+    extraPortMappings:
+      - containerPort: 80
+        hostPort: 80      # HTTP 포트 바인딩
+        protocol: TCP
+      - containerPort: 443
+        hostPort: 443     # HTTPS 포트 바인딩
+        protocol: TCP

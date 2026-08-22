@@ -1,0 +1,22 @@
+# config\pod-cm-volume.yaml
+
+apiVersion: v1
+kind: Pod
+metadata: 
+  name: pod-cm-volume
+spec: 
+  containers:
+    - name: nginx
+      image: nginx:alpine
+      ports: 
+        - containerPort: 80
+      volumeMounts: 
+        # 2. 컨테이너 내부 어느 경로에 마운트할지 지정
+        - name: config-volume
+          mountPath: /usr/share/nginx/html/info.txt # mountPath만 존재하면 기존 디렉터리 전체 덮어씀
+          subPath: info.txt # info.txt 만 덮어쓰고, 다른 파일들은 유지 (Hot Reload 지원 안 됨: Pod 재시작 필요)
+  volumes:
+    # 1. (해석순서) ConfigMap 리소스를 볼륨으로 정의
+    - name: config-volume
+      configMap: 
+        name: cm-volume  # ConfigMap 이름
