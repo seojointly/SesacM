@@ -1,0 +1,26 @@
+apiVersion: apps/v1
+kind: ReplicaSet
+metadata: 
+  name: nginx-replicaset
+spec:
+  # 유지해야 하는 Pod의 개수
+  replicas: 3
+  selector: 
+    matchLabels: 
+    # ReplicaSet가 감시하는 Pod의 라벨 (동일해야 쳐다볼 수 있음)
+      app: nginx-rs
+
+  template: 
+    # Pod 생성하듯이 작성
+    metadata: 
+      labels: 
+      # Pod에 붙이는 라벨
+        app: nginx-rs
+    # Pod 에 붙이는 spec
+    spec: 
+      containers: 
+        - name: nginx
+          image: nginx:alpine
+          ports: 
+            - containerPort: 80
+          imagePullPolicy: IfNotPresent

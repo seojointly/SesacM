@@ -1,0 +1,16 @@
+# ~/k8s/pv/storage-pod.yaml
+apiVersion: v1
+kind: Pod
+metadata:
+  name: storage-test-pod
+spec:
+  containers:
+    - name: nginx-container
+      image: nginx:alpine
+      volumeMounts:
+        - mountPath: "/usr/share/nginx/html" # 컨테이너 내부 마운트 경로
+          name: my-storage                   # spec.volumes[].name과 매칭
+  volumes:
+    - name: my-storage                       # 볼륨 연결 별칭
+      persistentVolumeClaim:
+        claimName: local-pvc                 # [필수] 사용할 PVC 오브젝트 명칭

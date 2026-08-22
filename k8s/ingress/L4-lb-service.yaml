@@ -1,0 +1,20 @@
+# ingress\L4-lb-service.yaml
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: ingress-nginx-lb
+  namespace: ingress-nginx # NGINX ingress Controller와 동일한 네임스페이스에서 관리
+spec: 
+  type: LoadBalancer # 최전방 L4 로드밸런서
+  selector:
+    app.kubernetes.io/name: ingress-nginx
+    app.kubernetes.io/component: controller
+  ports:
+    - name: http
+      port: 80
+      targetPort: 80
+    - name: https
+      port: 443
+      targetPort: 443
+    

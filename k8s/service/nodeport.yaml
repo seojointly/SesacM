@@ -1,0 +1,34 @@
+# service\nodeport.yaml
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: web
+  labels:
+    app: web
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: web
+  template:
+    metadata:
+      labels: 
+        app: web
+    spec: 
+      containers:
+        - name: nginx
+          image: nginx:alpine
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: web-svc
+spec: 
+  type: NodePort
+  selector: 
+    app: web
+  ports: 
+    - port: 80
+      targetPort: 80
+      nodePort: 30007

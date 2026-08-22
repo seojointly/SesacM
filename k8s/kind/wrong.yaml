@@ -1,0 +1,8 @@
+# C:\Users\user\k8s\kind\wrong.yaml
+
+apiVersion: v1
+kind: Deployment
+metadata:
+  name: test
+spec:
+  replicas: 1

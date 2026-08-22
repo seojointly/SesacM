@@ -1,0 +1,33 @@
+# ~/k8s/config/my-deployment.yaml
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: my-deployment
+  labels:
+    app: config-test
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: config-test
+  template:
+    metadata:
+      labels:
+        app: config-test
+    spec:
+      containers:
+        - name: nginx-container
+          image: nginx:alpine
+          # [방식 1] 개별 키-값 변수 주입
+          env:
+            - name: USER_NAME # 이름 변경(컨테이너 내부에서 사용할 환경 변수)
+              valueFrom:
+                configMapKeyRef:
+                  name: my-config
+                  key: MY_NAME # 이름 변경(ConfigMap 객체 안에 실제로 저장된 데이터 키)
+            - name: USER_AGE
+              valueFrom:
+                configMapKeyRef:
+                  name: my-config
+                  key: MY_AGE

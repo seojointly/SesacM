@@ -1,0 +1,27 @@
+# ~/k8s/ingress/ingress-path.yaml
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: path-ingress
+  annotations:
+    # /apple 경로 유입 시 백엔드 파드로 전달될 때 경로를 / 로 재작성(Rewrite) 처리
+    nginx.ingress.kubernetes.io/rewrite-target: /
+spec:
+  ingressClassName: nginx
+  rules:
+    - http:
+        paths:
+          - path: /apple          # 1. /apple 경로 매칭
+            pathType: Prefix
+            backend:
+              service:
+                name: apple-svc
+                port:
+                  number: 5678
+          - path: /banana         # 2. /banana 경로 매칭
+            pathType: Prefix
+            backend:
+              service:
+                name: banana-svc
+                port:
+                  number: 5678

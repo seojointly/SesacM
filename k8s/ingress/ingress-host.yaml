@@ -1,0 +1,31 @@
+# ~/k8s/ingress/ingress-host.yaml
+
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: host-ingress
+  annotations:
+    nginx.ingress.kubernetes.io/rewrite-target: / # Pod 전달 시 Target 경로 재작성
+spec:
+  ingressClassName: nginx                         # NGINX Controller 지정 (미지정 시 404 원인)
+  rules:
+    - host: app1.local                            # Host 헤더 검증 1
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: app1-svc
+                port:
+                  number: 80
+    - host: app2.local                            # Host 헤더 검증 2
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: app2-svc
+                port:
+                  number: 80
