@@ -82,3 +82,6 @@ $RECYCLE.BIN/
 # End of https://www.toptal.com/developers/gitignore/api/windows,visualstudiocode,java
 */cloud-provider-kind-v030/*
 k8s/practice/demo/*
+"**/.postman/" 
+"**/postman/" 
+"**/.env" 

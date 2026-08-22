@@ -1,0 +1,67 @@
+version: '3.8'
+
+services:
+  # 1. MySQL 설정
+  db:
+    image: mysql:8.0
+    container_name: ddasoom-mysql
+    environment:
+      MYSQL_DATABASE: ddasoom
+      MYSQL_USER: ssuser
+      MYSQL_PASSWORD: '1234'
+      MYSQL_ROOT_PASSWORD: '1234'
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+
+  # 2. Redis 설정
+  redis:
+    image: redis:alpine
+    container_name: ddasoom-redis
+    ports:
+      - "6379:6379"
+
+  # 3. MinIO 설정
+  minio:
+    image: minio/minio
+    container_name: ddasoom-minio
+    ports:
+      - "9000:9000"
+      - "9001:9001"
+    environment:
+      MINIO_ROOT_USER: minioadmin
+      MINIO_ROOT_PASSWORD: minioadmin
+    command: server /data --console-address ":9001"
+    volumes:
+      - minio_data:/data
+
+  # 4. Spring Boot 백엔드
+  backend:
+    build: ./backend # 백엔드 프로젝트 폴더 경로
+    container_name: ddasoom-backend
+    ports:
+      - "8080:8080"
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:mysql://db:3306/ddasoom?serverTimezone=Asia/Seoul&characterEncoding=UTF-8&rewriteBatchedStatements=true
+      - SPRING_DATA_REDIS_HOST=redis
+      - MINIO_ENDPOINT=http://minio:9000
+      # 시크릿 환경변수들 (필요시 아래에 전달)
+      - DDASOOM_JWT_SECRET=${DDASOOM_JWT_SECRET}
+    depends_on:
+      - db
+      - redis
+      - minio
+
+  # 5. 프론트엔드 (Vite/React 기준)
+  frontend:
+    build: ./frontend # 프론트엔드 프로젝트 폴더 경로
+    container_name: ddasoom-frontend
+    ports:
+      - "5173:5173"
+    depends_on:
+      - backend
+
+volumes:
+  mysql_data:
+  minio_data:
