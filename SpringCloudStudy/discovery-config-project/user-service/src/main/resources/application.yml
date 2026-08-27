@@ -1,0 +1,29 @@
+server:
+  port: 0 # 2개 이상의 스케일아웃 기동 실습을 위해 런타임 랜덤 포트 개방 설정
+
+spring:
+  application:
+    name: user-service
+  config:
+    import: "optional:configserver:http://localhost:8888/"
+  cloud:
+    bus:
+      id: ${spring.application.name}:${server.port:0}:${random.value} # 버스 내 인스턴스 고유 키 식별
+  rabbitmq:
+    host: localhost
+    port: 5672
+    username: guest
+    password: guest
+
+eureka:
+  client:
+    register-with-eureka: true
+    fetch-registry: true
+    service-url:
+      defaultZone: http://localhost:8761/eureka/
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "busrefresh,health" # 수동 refresh 대신 busrefresh 엔드포인트 개방

@@ -1,0 +1,67 @@
+// 1. 플러그인 설정
+plugins {
+  id 'java'
+  id 'org.springframework.boot' version '3.5.10' apply false
+  id 'io.spring.dependency-management' version '1.1.7' apply false
+}
+
+// 2. 모든 프로젝트(Root + 하위 모듈) 공통 설정
+allprojects {
+  group = 'com.example'
+  version = '0.0.1-SNAPSHOT'
+
+  repositories {
+    mavenCentral()
+  }
+}
+
+// 3. 자식 모듈들에게만 적용할 실질적 빌드 설정
+subprojects {
+  apply plugin: 'java-library'
+  apply plugin: 'org.springframework.boot'
+  apply plugin: 'io.spring.dependency-management'
+
+  java {
+    toolchain {
+      languageVersion = JavaLanguageVersion.of(21)
+    }
+  }
+
+  configurations {
+    compileOnly {
+      extendsFrom annotationProcessor
+    }
+  }
+
+  dependencies {
+		// Spring Boot Actuator (/actuator/refresh, /actuator/health 등 엔드포인트 제공)
+		// 모든 마이크로서비스의 헬스체크 및 환경 갱신을 위해 액추에이터 기본 탑재
+		implementation 'org.springframework.boot:spring-boot-starter-actuator'
+
+		// Lombok
+		compileOnly 'org.projectlombok:lombok'
+		annotationProcessor 'org.projectlombok:lombok'
+		
+		// Spring Configuration Processor
+		annotationProcessor 'org.springframework.boot:spring-boot-configuration-processor'
+
+		// Test
+		testImplementation 'org.springframework.boot:spring-boot-starter-test'
+		testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+  }
+
+  tasks.named('test') {
+    useJUnitPlatform()
+  }
+
+	// Spring Cloud BOM: 변수로 버전 관리
+	// Spring Cloud 라이브러리 전역 버전 관리 프로퍼티 선언
+	ext {
+		set('SpringCloudVersion', '2025.0.0')
+	}
+	dependencyManagement {
+		imports {
+			mavenBom "org.springframework.cloud:spring-cloud-dependencies:${SpringCloudVersion}"
+		}
+	}
+}

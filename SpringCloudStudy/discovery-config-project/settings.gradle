@@ -1,0 +1,6 @@
+rootProject.name = 'discovery-config-project'
+
+include 'discovery-service'
+include 'config-service'
+include 'product-service'
+include 'user-service'
