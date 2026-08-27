@@ -1,0 +1,15 @@
+# Spring Cloud Config Server 포트 설정 (관례 상 8888)
+server:
+  port: 8888
+
+spring:
+  application: 
+    name: config-service
+
+  cloud: 
+    config:
+      server:
+        git:
+          uri: https://github.com/seojointly/SesacM.git
+          default-label: main
+          search-paths: SpringCloudStury/discovery-config-project/config-refo

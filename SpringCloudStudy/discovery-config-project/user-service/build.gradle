@@ -1,0 +1,13 @@
+dependencies {
+  // Spring Cloud Starter Netflix Eureka Client
+  implementation 'org.springframework.cloud:spring-cloud-starter-netflix-eureka-client'
+
+  // Spring Starter Web
+  implementation 'org.springframework.boot:spring-boot-starter-web'
+
+  // Spring Cloud Starter Config (Client)
+  implementation 'org.springframework.cloud:spring-cloud-starter-config'
+
+  // Spring Cloud Starter Bus AMQP: 자동으로 메시지 브로커(RabbitMQ)에 연결 시도
+  implementation 'org.springframework.cloud:spring-cloud-starter-bus-amqp'
+}
