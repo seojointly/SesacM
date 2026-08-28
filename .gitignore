@@ -80,8 +80,22 @@ $RECYCLE.BIN/
 *.lnk
 
 # End of https://www.toptal.com/developers/gitignore/api/windows,visualstudiocode,java
-*/cloud-provider-kind-v030/*
+
+# Gradle / Java Build Artifacts & Cache
+**/.gradle/
+.gradle/
+**/build/
+build/
+**/out/
+**/target/
+
+# Cloud Provider Kind & K8s Demo
+cloud-provider-kind-v030/
+**/cloud-provider-kind-v030/
 k8s/practice/demo/*
+
+# Environment & Postman
 "**/.postman/" 
 "**/postman/" 
-"**/.env" 
+"**/.env"
+
