@@ -97,5 +97,10 @@ k8s/practice/demo/*
 # Environment & Postman
 "**/.postman/" 
 "**/postman/" 
-"**/.env"
 
+# .env 파일 전체 무시
+**/.env
+
+# Postman 폴더 무시
+**/.postman/
+**/postman/
