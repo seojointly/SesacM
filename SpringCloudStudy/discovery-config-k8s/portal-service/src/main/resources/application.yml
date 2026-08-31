@@ -1,0 +1,6 @@
+server:
+  port: 8080  # 컨테이너 내부 포트
+  
+spring:
+  application:
+    name: portal-service
