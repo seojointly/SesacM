@@ -1,0 +1,60 @@
+// 1. 플러그인 설정
+plugins {
+  id 'java'
+  id 'org.springframework.boot' version '3.5.10' apply false
+  id 'io.spring.dependency-management' version '1.1.7' apply false
+}
+
+// 2. 모든 프로젝트(Root + 하위 모듈) 공통 설정
+allprojects {
+  group = 'com.example'
+  version = '0.0.1-SNAPSHOT'
+
+  repositories {
+    mavenCentral()
+  }
+}
+
+// 3. 자식 모듈들에게만 적용할 실질적 빌드 설정
+subprojects {
+  apply plugin: 'java-library'
+  apply plugin: 'io.spring.dependency-management'
+  // common-module을 제외한 나머지 모듈에만 Spring Boot 플러그인 적용
+  if (project.name != 'common-module') {
+    apply plugin: 'org.springframework.boot'
+  }
+  
+  java {
+    toolchain {
+      languageVersion = JavaLanguageVersion.of(21)
+    }
+  }
+
+  configurations {
+    compileOnly {
+      extendsFrom annotationProcessor
+    }
+  }
+
+  dependencies {
+    implementation 'org.springframework.boot:spring-boot-starter'
+    compileOnly 'org.projectlombok:lombok'
+    annotationProcessor 'org.projectlombok:lombok'
+    annotationProcessor 'org.springframework.boot:spring-boot-configuration-processor'
+    testImplementation 'org.springframework.boot:spring-boot-starter-test'
+    testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+  }
+
+  tasks.named('test') {
+    useJUnitPlatform()
+  }
+
+  ext {
+    set('SpringCloudVersion', '2025.0.0')
+  }
+  dependencyManagement {
+    imports {
+      mavenBom "org.springframework.cloud:spring-cloud-dependencies:${SpringCloudVersion}"
+    }
+  }
+}

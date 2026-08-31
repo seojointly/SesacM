@@ -1,0 +1,22 @@
+syntax = "proto3";
+
+package com.example.proto;
+
+option java_multiple_files = true;
+option java_package = "com.example.common.banking";
+
+service BankingService {
+  rpc ProcessTransfer(TransferRequest) returns (TransferResponse);
+}
+
+message TransferRequest {
+  string senderAccount = 1;
+  string receiverAccount = 2;
+  int64 amount = 3;
+}
+
+message TransferResponse {
+  string transactionId = 1;
+  bool success = 2;
+  string message = 3;
+}

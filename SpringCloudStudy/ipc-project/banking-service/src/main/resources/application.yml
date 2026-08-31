@@ -1,0 +1,26 @@
+server:
+  port: 8081
+
+spring:
+  application:
+    name: banking-service
+  grpc:
+    server:
+      port: 9090
+
+eureka:
+  client:
+    register-with-eureka: true
+    fetch-registry: true
+    service-url:
+      defaultZone: http://localhost:8761/eureka/
+  instance:
+    # Eureka가 서비스 주소를 등록할 때 사용할 gRPC 메타데이터 추가
+    metadata-map:
+      grpc.port: ${spring.grpc.server.port:9090}
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "health,info"  # health 및 info 엔드포인트 노출

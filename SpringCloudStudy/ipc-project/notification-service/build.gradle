@@ -1,0 +1,10 @@
+dependencies {
+  // Spring Web
+  implementation 'org.springframework.boot:spring-boot-starter-webmvc'
+  
+  // Spring Actuator
+  implementation 'org.springframework.boot:spring-boot-starter-actuator'
+
+  // Spring Cloud Starter Netflix Eureka Client
+  implementation 'org.springframework.cloud:spring-cloud-starter-netflix-eureka-client'
+}

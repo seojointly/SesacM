@@ -1,0 +1,20 @@
+syntax = "proto3";
+
+package com.example.proto;
+
+option java_multiple_files = true;
+option java_package = "com.example.common.stock";
+
+service StockService {
+  rpc CheckStock (ProductRequest) returns (StockResponse);
+}
+
+message ProductRequest {
+  string productId = 1;
+}
+
+message StockResponse {
+  string productId = 1;
+  int32 quantity = 2;
+  bool inStock = 3;
+}

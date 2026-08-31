@@ -1,0 +1,20 @@
+// 스프링 부트 단독 실행(Boot Jar)이 아닌 일반 라이브러리(Jar) 형태로 패키징
+jar {
+  enabled = true
+}
+
+dependencies {
+  // Validation: DTO 필드 검증용 (@NotNull, @Size, @Email 등)
+  implementation 'org.springframework.boot:spring-boot-starter-validation'
+
+  // JSON & Time: ObjectMapper, @JsonFormat, LocalDateTime 직렬화 지원
+  // Tomcat 없어 Spring Starter Web보다 가벼운 라이브러리
+  implementation 'org.springframework.boot:spring-boot-starter-json'
+}
+
+// 버전 관리가 빠지는 경우 대비(https://docs.spring.io/spring-boot/gradle-plugin/managing-dependencies.html)
+dependencyManagement {
+  imports {
+    mavenBom org.springframework.boot.gradle.plugin.SpringBootPlugin.BOM_COORDINATES
+  }
+}

@@ -1,0 +1,6 @@
+server:
+  port: 8081 # web port
+
+grpc:
+  server:
+    port: 9090 # data 통신 port
