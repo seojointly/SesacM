@@ -1,0 +1,10 @@
+dependencies {
+  // common-proto
+  implementation project(':common-proto')
+  
+  // Spring Web
+  implementation 'org.springframework.boot:spring-boot-starter-webmvc'
+  
+  // gRPC Client
+  implementation 'net.devh:grpc-client-spring-boot-starter:3.1.0.RELEASE'
+}

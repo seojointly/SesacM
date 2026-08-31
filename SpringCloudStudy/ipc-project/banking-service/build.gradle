@@ -1,0 +1,16 @@
+dependencies {
+  // common-proto
+  implementation project(':common-proto')
+  
+  // Spring Web
+  implementation 'org.springframework.boot:spring-boot-starter-webmvc'
+
+  // Spring Actuator
+  implementation 'org.springframework.boot:spring-boot-starter-actuator'
+
+  // Spring Boot 4.1.1 공식 지원 gRPC Server 스타터
+  implementation 'org.springframework.boot:spring-boot-starter-grpc-server'
+  
+  // Spring Cloud Netflix Eureka Client
+  implementation 'org.springframework.cloud:spring-cloud-starter-netflix-eureka-client'
+}

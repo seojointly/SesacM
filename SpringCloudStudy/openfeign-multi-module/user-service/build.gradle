@@ -1,0 +1,10 @@
+dependencies {
+  // Spring Cloud Starter Netflix Eureka Client
+  implementation 'org.springframework.cloud:spring-cloud-starter-netflix-eureka-client'
+
+  // Spring Starter Web
+  implementation 'org.springframework.boot:spring-boot-starter-web'
+  
+  // common-module
+  implementation project(':common-module')
+}

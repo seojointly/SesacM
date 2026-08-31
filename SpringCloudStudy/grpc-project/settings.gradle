@@ -1,0 +1,5 @@
+rootProject.name = 'grpc-project'
+
+include 'common-proto'
+include 'stock-service'
+include 'order-service'

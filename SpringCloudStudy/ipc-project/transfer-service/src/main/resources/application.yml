@@ -1,0 +1,34 @@
+server:
+  port: 8080
+
+spring:
+  application:
+    name: transfer-service
+
+eureka:
+  client:
+    register-with-eureka: true
+    fetch-registry: true
+    service-url:
+      defaultZone: http://localhost:8761/eureka/
+
+grpc:
+  client:
+    banking-service:
+      address: 'static://localhost:9090'
+      negotiation-type: plaintext
+      
+      # Eureka를 통해 찾을 경우 "discovery://" 사용
+      # 슬래시가 3개인 이유
+      # URL 구조 = 프로토콜 + :// + 호스트(주소) + / + 경로(Path)
+      # 호스트가 없어서(로컬에서 찾는다는 의미) 생략했기 때문에 슬래시가 3개로 보임
+      # address: 'discovery:///banking-service'
+      # 이슈) 
+      # Spring Boot 4.1.1(Spring Cloud 2025.1.2)과 구형 net.devh 라이브러리 간의 Discovery NameResolver 호환성 이슈로 현재 동작 안 함
+      # Spring Boot 3.5.x에서는 동작하였으니, 이후 개선될 것으로 기대하고 넘어감
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "health,info"  # health 및 info 엔드포인트 노출

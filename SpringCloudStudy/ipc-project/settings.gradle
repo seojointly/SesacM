@@ -1,0 +1,7 @@
+rootProject.name = 'ipc-project'
+
+include 'common-proto'
+include 'discovery-service'
+include 'banking-service'
+include 'notification-service'
+include 'transfer-service'

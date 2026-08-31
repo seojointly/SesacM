@@ -1,0 +1,7 @@
+dependencies {
+  // common-proto
+  implementation project(':common-proto')
+  
+  // Spring Boot 4.1.1 공식 지원 gRPC Server 스타터
+  implementation 'org.springframework.boot:spring-boot-starter-grpc-server'
+}

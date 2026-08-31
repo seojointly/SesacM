@@ -1,0 +1,13 @@
+dependencies {
+  // 필수: 내장 Tomcat을 띄워 프로세스를 유지시켜 줌
+  implementation 'org.springframework.boot:spring-boot-starter-web'
+
+  // common-module
+  implementation project(':common-module')
+    
+  // Spring Cloud Starter OpenFeign
+  implementation 'org.springframework.cloud:spring-cloud-starter-openfeign'
+  
+  // Spring Cloud Starter Netflix Eureka Client
+  implementation 'org.springframework.cloud:spring-cloud-starter-netflix-eureka-client'
+}
