@@ -1,0 +1,5 @@
+rootProject.name = 'keycloak-bff-project'
+
+include 'gateway-service'
+include 'product-service'
+include 'admin-service'
