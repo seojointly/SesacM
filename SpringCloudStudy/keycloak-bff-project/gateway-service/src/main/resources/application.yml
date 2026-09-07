@@ -1,0 +1,43 @@
+server:
+  port: 8000
+
+spring:
+  application:
+    name: gateway-service
+
+  threads:
+    virtual:
+      enabled: true
+
+# OAuth2 Client 설정을 가진 게이트웨이 (BFF)는 TokenRelay 필터 필수
+  cloud:
+    gateway:
+      server:
+        webmvc:
+          routes:
+          - id: product-service-route
+            uri: lb://product-service
+            predicates:
+              - Path=/api/products/**
+            filters:
+              - TokenRelay
+          - id: admin-service-route
+            uri: lb://admin-service
+            predicates:
+              - Path=/api/admin/**
+            filters:
+              TokenRelay
+
+  # Keycloak 인증 서버 설정 (OAuth2 Client 설정)
+  security:
+    oauth2:
+      client:
+        registration:
+          keycloak: # resgistrationId
+            client-id: msa-client
+            client-secret: BYCso0KKI65MlPDxKOW8p8Zfk9xZV41G
+            authorization-grant-type: authorization_code
+            scope: openid, profile, email
+        provider:
+          keycloak:
+            issuer-uri: http://localhost:8080/realms/msa-shop
