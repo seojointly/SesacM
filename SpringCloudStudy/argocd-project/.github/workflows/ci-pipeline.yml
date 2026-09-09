@@ -3,41 +3,43 @@ name: CI/CD Pipeline with GitOps
 on:
   push:
     branches: [ "main" ]
+    paths:
+      - 'SpringCloudStudy/argocd-project/**'  # 이 폴더 안에서 변경이 일어날 때만 실행
     paths-ignore:
-      - 'k8s/**'  # Manifest 수정 커밋 시 무한 빌드 루프 방지
+      - 'SpringCloudStudy/argocd-project/k8s/**'  # Manifest 수정 커밋 시 무한 빌드 루프 방지
 
 jobs:
   # === 1. CI Job: 코드 빌드, 도커 이미지 생성 및 레지스트리 푸시 ===
-  build: # 1번 Job 이름 (CI)
+  build:
     runs-on: ubuntu-latest
     permissions:
       contents: read  # 코드 읽기 권한만 부여
 
     steps:
-      # 1. 코드 체크아웃 (git에 있는 코드를 내려받는 것)
+      # 1. 코드 체크아웃
       - name: Checkout code
         uses: actions/checkout@v4
 
-      # 2. JDK 21 설치 (Gradle 캐시 자동 활성화)
+      # 2. JDK 21 설치 (하위 폴더 경로 지정)
       - name: Set up JDK 21
         uses: actions/setup-java@v4
         with:
           java-version: '21'
           distribution: 'temurin'
-          cache: 'gradle'  # 빌드 속도 향상을 위한 Gradle 캐싱
+          cache: 'gradle'
+          cache-dependency-path: SpringCloudStudy/argocd-project/build.gradle.kts  # 또는 build.gradle
 
-      # 3. Gradle 빌드
+      # 3. Gradle 빌드 (하위 폴더로 이동해서 실행)
       - name: Build with Gradle
+        working-directory: SpringCloudStudy/argocd-project
         run: |
           chmod +x gradlew
           ./gradlew clean build
         
       # === 4, 5 = buildx 설정 ===
-      # 4. QEMU 설정 (다른 아키텍처 에뮬레이션을 위해)
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v3
 
-      # 5. Docker Buildx 설정 (멀티 플랫폼 및 고급 캐싱 지원)
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
 
@@ -48,20 +50,21 @@ jobs:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_PASSWORD }}
 
-      # 7. 도커 이미지 빌드 및 푸시
+      # 7. 도커 이미지 빌드 및 푸시 (context를 하위 폴더로 지정)
       - name: Build and Push Docker Image
         uses: docker/build-push-action@v6
         with:
-          context: .
-          platforms: linux/amd64,linux/arm64  # amd64와 arm64 동시 빌드 지정
+          context: SpringCloudStudy/argocd-project
+          file: SpringCloudStudy/argocd-project/Dockerfile
+          platforms: linux/amd64,linux/arm64
           push: true
           tags: ${{ secrets.DOCKERHUB_USERNAME }}/argocd-project:${{ github.run_number }}
           cache-from: type=gha
-          cache-to: type=gha,mode=max  # GitHub Actions 캐시 백엔드 활용
+          cache-to: type=gha,mode=max
 
   # === 2. CD Job (GitOps): Helm values.yaml 매니페스트 태그 업데이트 및 커밋/푸시 ===
-  deploy: # 2번 Job 이름 (CD)
-    needs: build  # build Job이 성공해야만 실행
+  deploy:
+    needs: build
     runs-on: ubuntu-latest
     permissions:
       contents: write  # 레포지토리 파일 수정 및 커밋/푸시 권한
@@ -71,23 +74,24 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
         with:
-          token: ${{ secrets.GITHUB_TOKEN }}  # GitHub가 기본 제공하는 토큰
+          token: ${{ secrets.GITHUB_TOKEN }}
           ref: main
 
-      # 2. Helm values.yaml 태그 업데이트
+      # 2. Helm values.yaml 태그 업데이트 (하위 폴더 경로 반영)
       - name: Update Helm Values
         run: |
-          sed -i 's/tag: ".*"/tag: "${{ github.run_number }}"/g' k8s/helm/values.yaml
-          cat k8s/helm/values.yaml
+          VAL_PATH="SpringCloudStudy/argocd-project/k8s/helm/values.yaml"
+          sed -i 's/tag: ".*"/tag: "${{ github.run_number }}"/g' "$VAL_PATH"
+          cat "$VAL_PATH"
 
       # 3. 변경 사항 커밋 및 푸시
       - name: Commit and Push Manifest changes
         run: |
+          VAL_PATH="SpringCloudStudy/argocd-project/k8s/helm/values.yaml"
           git config --global user.name "github-actions[bot]"
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
-          git add k8s/helm/values.yaml
+          git add "$VAL_PATH"
           
-          # 변경사항이 있을 때만 커밋 수행 (중복 푸시 에러 방지)
           if git diff --staged --quiet; then
             echo "No changes to commit"
           else
