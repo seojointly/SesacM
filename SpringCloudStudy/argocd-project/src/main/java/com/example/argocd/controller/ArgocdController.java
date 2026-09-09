@@ -18,6 +18,6 @@ public class ArgocdController {
       e.printStackTrace();
     }
     // 배포된 버전을 확인하기 위해 v1, v2 등으로 텍스트를 변경하며 실습
-    return "CI/CD Pipeline (v1) - Host: " + hostName;
+    return "CI/CD Pipeline (v2) - Host: " + hostName;
   }
 }
