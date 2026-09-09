@@ -3,7 +3,7 @@ replicaCount: 2
 image:
   repository: seojointly/argocd-project  # 본인 Docker Hub ID 입력
   pullPolicy: IfNotPresent
-  tag: "1"  # CI에 의해 빌드 번호(예: 0 -> 1 -> 2 -> ...)로 자동 수정되는 부분
+  tag: "2"  # CI에 의해 빌드 번호(예: 0 -> 1 -> 2 -> ...)로 자동 수정되는 부분
 
 service:
   type: LoadBalancer
