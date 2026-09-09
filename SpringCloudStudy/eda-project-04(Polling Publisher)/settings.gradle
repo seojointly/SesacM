@@ -1,0 +1,5 @@
+rootProject.name = 'eda-project-04(Polling Publisher)'
+
+include 'common-module'
+include 'order-service'
+include 'stock-service'

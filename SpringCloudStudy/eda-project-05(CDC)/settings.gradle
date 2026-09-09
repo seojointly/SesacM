@@ -1,4 +1,4 @@
-rootProject.name = 'eda-project-01'
+rootProject.name = 'eda-project-05(CDC)'
 
 include 'common-module'
 include 'order-service'
