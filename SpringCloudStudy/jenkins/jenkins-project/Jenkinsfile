@@ -1,0 +1,93 @@
+pipeline {
+  agent any
+
+  environment {
+    DOCKER_REPO       = "seojointly/jenkins-project"   // 본인 Docker Hub ID
+    DOCKER_CRED_ID    = "DOCKERHUB_CREDENTIALS"        // Jenkins에 등록한 Docker Hub 자격 증명 ID
+    MANIFEST_REPO_URL = "github.com/seojointly/jenkins-manifests.git" // https:// 제외한 순수 경로
+    GIT_CRED_ID       = "GIT_PAT"                      // Jenkins에 등록한 GitHub PAT ID
+  }
+
+  stages {
+    stage('Checkout App') {
+      steps {
+        checkout scm
+      }
+    }
+
+    stage('Build App') {
+      steps {
+        sh '''
+          chmod +x gradlew
+          ./gradlew clean bootJar -x test
+        '''
+      }
+    }
+
+    stage('Docker Buildx Multi-Arch Build & Push') {
+      steps {
+        // Docker Hub 로그인 정보를 안전하게 주입
+        withCredentials([usernamePassword(credentialsId: DOCKER_CRED_ID, usernameVariable: 'DOCKER_USER', passwordVariable: 'DOCKER_PASS')]) {
+          sh """
+            # 1. Docker Hub 로그인
+            echo "\${DOCKER_PASS}" | docker login -u "\${DOCKER_USER}" --password-stdin
+
+            # 2. Buildx Builder 인스턴스 확인 및 생성 (없으면 생성 후 기본 사용자로 등록)
+            docker buildx inspect multi-builder > /dev/null 2>&1 || docker buildx create --name multi-builder --driver docker-container --use
+            docker buildx use multi-builder
+
+            # 3. AMD64 / ARM64 멀티 아키텍처 동시 빌드 및 레지스트리 직푸시
+            # (멀티 플랫폼 이미지는 로컬 도커 엔진에 저장할 수 없으므로 --push 플래그로 원격 전송해야 함)
+            docker buildx build \\
+              --platform linux/amd64,linux/arm64 \\
+              -t ${DOCKER_REPO}:${BUILD_NUMBER} \\
+              -t ${DOCKER_REPO}:latest \\
+              --push .
+
+            # 4. 빌드 완료 후 인증 정보 정리
+            docker logout
+          """
+        }
+      }
+    }
+
+    stage('Update Manifest Repo (GitOps)') {
+      steps {
+        withCredentials([usernamePassword(credentialsId: GIT_CRED_ID, usernameVariable: 'GIT_USERNAME', passwordVariable: 'GIT_PASSWORD')]) {
+          sh """
+            git config --global user.email "jenkins-bot@users.noreply.github.com"
+            git config --global user.name "jenkins-bot"
+            
+            rm -rf jenkins-manifests
+            
+            # PAT 인증 정보를 결합하여 안전하게 clone
+            git clone https://${GIT_USERNAME}:${GIT_PASSWORD}@${MANIFEST_REPO_URL} jenkins-manifests
+            
+            cd jenkins-manifests
+            
+            # values.yaml의 태그 교체
+            sed -i 's/tag: ".*"/tag: "${BUILD_NUMBER}"/g' values.yaml
+            
+            git add values.yaml
+            
+            # 변경사항이 존재할 때만 커밋 및 Rebase Push 수행 (빈 커밋 에러 방지)
+            if git diff --staged --quiet; then
+              echo "No changes in values.yaml, skipping commit."
+            else
+              git commit -m "ci(gitops): update image tag to ${BUILD_NUMBER} [skip ci]"
+              git pull --rebase origin main
+              git push origin main
+            fi
+          """
+        }
+      }
+    }
+  }
+
+  post {
+    always {
+      // 워크스페이스 정리
+      cleanWs notFailBuild: true
+    }
+  }
+}

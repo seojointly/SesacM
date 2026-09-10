@@ -1,0 +1,19 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: jenkins-project
+  namespace: argocd
+spec:
+  project: default
+  source:
+    # Manifest Repo
+    repoURL: 'https://github.com/seojointly/jenkins-manifests.git'  # 내 GitHub ID로 변경
+    targetRevision: main
+    path: .  # Manifest Repo의 루트에 Chart.yaml가 있어서 '.'로 지정
+  destination:
+    server: 'https://kubernetes.default.svc'
+    namespace: default
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
