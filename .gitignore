@@ -104,3 +104,8 @@ k8s/practice/demo/*
 # Postman 폴더 무시
 **/.postman/
 **/postman/
+
+# AWS CLI Installation files
+awscliv2.zip
+aws/
+SpringCloudStudy/jenkins/jenkins-server/jenkins_home/

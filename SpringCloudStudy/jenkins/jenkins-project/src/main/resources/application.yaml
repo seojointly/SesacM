@@ -1,0 +1,6 @@
+server:
+  port: 8080  # Jenkins: 8085, ArgoCD: 8081
+
+spring:
+  application:
+    name: jenkins-project

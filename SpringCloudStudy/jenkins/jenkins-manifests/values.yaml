@@ -1,0 +1,11 @@
+replicaCount: 2
+
+image:
+  repository: <도커허브ID>/jenkins-project  # 내 DockerHub ID로 변경
+  pullPolicy: IfNotPresent
+  tag: "0"  # Jenkins에 의해 자동 수정되는 항목
+
+service:
+  type: LoadBalancer
+  port: 80
+  targetPort: 8080
