@@ -25,5 +25,11 @@ variable "private_subnet_cidrs" {
 variable "project_name" {
   description = "프로젝트 이름(프리픽스)"
   type = string
-  default = "my-eks"
+  default = "my-eks-5"
+}
+
+variable "my_ip" {
+  description = "SSH 접속을 위한 관리자 공인 IP"
+  type = string
+  default = "0.0.0.0/0"
 }
