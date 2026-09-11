@@ -108,4 +108,5 @@ k8s/practice/demo/*
 # AWS CLI Installation files
 awscliv2.zip
 aws/
+
 SpringCloudStudy/jenkins/jenkins-server/jenkins_home/
