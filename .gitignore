@@ -110,3 +110,6 @@ awscliv2.zip
 aws/
 
 SpringCloudStudy/jenkins/jenkins-server/jenkins_home/
+
+
+"**/.terraform/"
