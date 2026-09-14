@@ -111,5 +111,22 @@ aws/
 
 SpringCloudStudy/jenkins/jenkins-server/jenkins_home/
 
+# Local .terraform directories
+**/.terraform/
 
-"**/.terraform/"
+# .tfstate files
+*.tfstate
+*.tfstate.*
+
+# Crash log files
+crash.log
+crash.*.log
+
+# Exclude override files as they are usually used for local development
+override.tf
+override.tf.json
+*_override.tf
+*_override.tf.json
+
+# Separate log files
+terraform.log
