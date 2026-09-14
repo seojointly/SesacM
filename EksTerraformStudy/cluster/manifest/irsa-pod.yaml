@@ -1,0 +1,14 @@
+# ~/eks-terraform/cluster/manifest/irsa-pod.yaml
+
+apiVersion: v1
+kind: Pod
+metadata:
+  name: s3-reader
+spec:
+  serviceAccountName: sesac-d5-s3-read-sa  # SA 지정
+  containers:
+  - name: sesac-d5-s3-read-sa
+    # AWS 공식 CLI 이미지 사용 (aws 명령을 가지고 있음)
+    image: amazon/aws-cli:latest
+    # 컨테이너가 종료되지 않도록 1시간마다 sleep을 반복
+    command: ["/bin/sh", "-c", "while true; do sleep 3600; done"]
