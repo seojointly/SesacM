@@ -5,8 +5,8 @@ data "terraform_remote_state" "vpc" {
   backend = "s3"
 
   config = {
-    bucket = "sesac-d5-terraform-state-bucket"  # 버킷명
-    key    = "dev/vpc/terraform.tfstate"           # VPC의 key
+    bucket = "sesac-d5-terraform-state-bucket" # 버킷명
+    key    = "dev/vpc/terraform.tfstate"       # VPC의 key
     region = "ap-northeast-2"
   }
 }

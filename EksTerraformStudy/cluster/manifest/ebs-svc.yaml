@@ -1,0 +1,12 @@
+# ~/eks-terraform/cluster/manifest/ebs-svc.yaml
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: ebs-svc
+spec:
+  ports:
+    - port: 3306
+  selector:
+    app: ebs-deploy-5
+  clusterIP: None  # DNS로 호출하기 위해 Headless Service로 생성

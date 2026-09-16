@@ -1,0 +1,22 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: lbc-deploy-5
+  labels:
+    app: nginx
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: nginx
+  template:
+    metadata:
+      labels:
+        app: nginx
+    spec:
+      containers:
+      - name: nginx-container
+        # ECR에 있는 nginx-test:alpine 주소
+        image: 916491575739.dkr.ecr.ap-northeast-2.amazonaws.com/nginx-test-5:alpine
+        ports:
+        - containerPort: 80

@@ -1,0 +1,11 @@
+# ~/eks-terraform/cluster/manifest/efs-storage-class.yaml
+
+apiVersion: storage.k8s.io/v1
+kind: StorageClass
+metadata:
+  name: efs-sc
+provisioner: efs.csi.aws.com  # EFS CSI 드라이버를 사용하겠다는 선언
+parameters:
+  provisioningMode: efs-ap            # Access Point 모드 (권장)
+  fileSystemId: fs-0aaf35019666bc226  # 테라폼 실행 결과로 나온 실제 EFS ID
+  directoryPerms: "700"               # 생성되는 디렉토리의 권한 (소유자만 읽기/쓰기 가능)

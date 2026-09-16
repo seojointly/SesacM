@@ -1,0 +1,13 @@
+# ~/eks-terraform/cluster/manifest/efs-pvc.yaml
+
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: efs-pvc
+spec:
+  accessModes:
+    - ReadWriteMany         # EFS는 여러 Node/Pod에서 동시 접속 가능 (RWX)
+  storageClassName: efs-sc  # 위에서 만든 StorageClass 이름과 일치해야 함
+  resources:
+    requests:
+      storage: 5Gi          # 형식적인 값 (EFS = 무한대 용량) 하지만 필수 작업
