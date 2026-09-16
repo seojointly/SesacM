@@ -1,0 +1,13 @@
+# ~/eks-terraform/cluster/manifest/ebs-pvc.yaml
+
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: ebs-pvc
+spec:
+  accessModes:
+    - ReadWriteOnce         # EBS는 한 번에 하나의 Node만 연결 가능 (RWO)
+  resources:
+    requests:
+      storage: 5Gi          # 5Gi 요청
+  storageClassName: ebs-sc-5  # StorageClass 이름

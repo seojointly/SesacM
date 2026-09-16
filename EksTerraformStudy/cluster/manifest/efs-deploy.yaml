@@ -1,0 +1,26 @@
+# ~/eks-terraform/cluster/manifest/efs-deploy.yaml
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: efs-deploy
+spec:
+  replicas: 2               # 공유 여부 체크를 위해 2개 띄움
+  selector:
+    matchLabels:
+      app: efs-deploy
+  template:
+    metadata:
+      labels:
+        app: efs-deploy
+    spec:
+      containers:
+      - name: nginx-container
+        image: nginx:alpine
+        volumeMounts:
+        - name: efs-volume
+          mountPath: /data  # 컨테이너 안의 /data 폴더가 EFS와 연결됨
+      volumes:
+      - name: efs-volume
+        persistentVolumeClaim:
+          claimName: efs-pvc

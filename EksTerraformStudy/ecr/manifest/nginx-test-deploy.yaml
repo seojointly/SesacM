@@ -1,0 +1,31 @@
+# ~/eks-terraform/ecr/manifest/nginx-test-deploy.yaml
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nginx-test-deploy
+  labels:
+    app: nginx-test-deploy
+spec:
+  replicas: 2  
+  selector:
+    matchLabels:
+      app: nginx-test-deploy
+  template:
+    metadata:
+      labels:
+        app: nginx-test-deploy
+    spec:
+      containers:
+      - name: nginx-container
+        # image: [업로드한_이미지_주소]:alpine  # 직전 단계에서 Push한 ECR 이미지 주소
+        image: 916491575739.dkr.ecr.ap-northeast-2.amazonaws.com/nginx-test-5:alpine
+        ports:
+        - containerPort: 80
+        resources:
+          requests:
+            cpu: "100m"
+            memory: "128Mi"
+          limits:
+            cpu: "200m"
+            memory: "256Mi"
