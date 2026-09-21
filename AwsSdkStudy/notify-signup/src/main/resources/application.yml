@@ -1,0 +1,14 @@
+spring:
+  application:
+    name: notify-signup
+
+aws:
+  s3:
+    template-bucket: member-template-bucket-5
+    template-key: welcome.html
+  dynamodb:
+    table: Member-5
+  ses:
+    auth-email: seojointly@gmail.com
+  sms:
+    auth-phone: "+821064918233"

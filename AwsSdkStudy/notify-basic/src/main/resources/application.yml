@@ -1,0 +1,8 @@
+spring:
+  application:
+    name: notify-basic
+
+
+aws:
+  ses:
+    auth-email: seojointly@gmail.com
