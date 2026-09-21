@@ -1,0 +1,32 @@
+package com.example.signup.repository;
+
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Repository;
+
+import com.example.signup.entity.Member;
+
+import jakarta.annotation.PostConstruct;
+import lombok.RequiredArgsConstructor;
+import software.amazon.awssdk.enhanced.dynamodb.DynamoDbEnhancedClient;
+import software.amazon.awssdk.enhanced.dynamodb.DynamoDbTable;
+import software.amazon.awssdk.enhanced.dynamodb.TableSchema;
+
+@Repository
+@RequiredArgsConstructor
+public class MemberRepository {
+
+  private final DynamoDbEnhancedClient enhancedClient;
+  private DynamoDbTable<Member> memberTable;
+  
+  @Value("${aws.dynamodb.table}")
+  private String TABLE_NAME;
+
+  @PostConstruct
+  public void init() {
+    memberTable = enhancedClient.table(TABLE_NAME, TableSchema.fromBean(Member.class));
+  }
+
+  public void save(Member member) {
+    memberTable.putItem(member);
+  }
+}

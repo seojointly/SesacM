@@ -1,0 +1,8 @@
+spring:
+  application:
+    name: sqs-basic
+
+aws:
+  region: ap-northeast-2
+  sqs:
+    queue-url: https://sqs.ap-northeast-2.amazonaws.com/916491575739/order-queue-5
