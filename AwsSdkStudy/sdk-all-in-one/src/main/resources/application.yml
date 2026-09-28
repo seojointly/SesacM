@@ -1,0 +1,16 @@
+spring:
+  application:
+    name: sdk-all-in-one
+  servlet:
+    multipart:
+      max-file-size: 10MB
+      max-request-size: 10MB
+
+aws:
+  region: ap-northeast-2
+
+  ssm:
+    parameter-name: /app/contest/info-5
+
+  secretsmanager:
+    secret-name: prod/ContestApp/Config-5
