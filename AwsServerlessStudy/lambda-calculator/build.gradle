@@ -1,0 +1,42 @@
+plugins {
+	id 'java'
+	// FAT Jar 생성을 위한 플러그인이 추가로 필요함
+	// "" = 변수처리 가능
+	id "com.gradleup.shadow" version "9.6.1"
+
+}
+
+group = 'com.example'
+version = '0.0.1-SNAPSHOT'
+
+java {
+	toolchain {
+		languageVersion = JavaLanguageVersion.of(21)
+	}
+}
+
+repositories {
+	mavenCentral()
+}
+
+dependencies {
+	// aws lambda dependency
+	implementation 'com.amazonaws:aws-lambda-java-core:1.4.0'
+
+}
+
+// ShadowJar 설정 
+// # 1. (FAT Jar 특징. 이름: *-all.jar 이므로 표준 jar 형식으로 변경 (-all 제거))
+tasks.named('shadowJar') {
+	archiveClassifier.set('')
+}
+
+// # 2. build 설정 
+tasks.named('build') {
+	dependsOn tasks.named('shadowJar')
+}
+
+// 3. UTF-8 설정 (boot가 빠져 작업해야 하는 것)
+tasks.withType(JavaCompile).configureEach {
+	options.encoding = 'UTF-8'
+}
