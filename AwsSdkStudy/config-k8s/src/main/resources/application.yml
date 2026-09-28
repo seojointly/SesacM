@@ -1,0 +1,8 @@
+spring:
+  application:
+    name: config-k8s
+
+db:
+  datasource:
+    username: ${DB_USERNAME:default_user} 
+    password: ${DB_PASSWORD:default_pass}
