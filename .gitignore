@@ -1,38 +1,47 @@
-# Created by https://www.toptal.com/developers/gitignore/api/windows,visualstudiocode,java
-# Edit at https://www.toptal.com/developers/gitignore?templates=windows,visualstudiocode,java
+# ==========================================
+# 1. OS & Environment Files
+# ==========================================
+.DS_Store
+Thumbs.db
+Thumbs.db:encryptable
+ehthumbs.db
+ehthumbs_vista.db
+[Dd]esktop.ini
+$RECYCLE.BIN/
+*.stackdump
 
-### Custom ###
+# Windows Installer / shortcuts
+*.cab
+*.msi
+*.msix
+*.msm
+*.msp
+*.lnk
+
+# ==========================================
+# 2. Secrets & Local Config (반드시 차단)
+# ==========================================
+**/.env
+**/.env.*
+*.pem
+*.tfvars
+crash.log
+local.properties
+
+# SAM 로컬 테스트용 환경변수
+env.json
+# SAM 배포 설정 (계정/버킷 정보 포함, 팀 공유가 필요하면 이 줄 삭제)
+samconfig.toml
+
+# ==========================================
+# 3. IDE & Editor (VS Code / JetBrains / STS / NetBeans)
+# ==========================================
+# --- Custom ---
 **/.vscode/
 **/bin/
 **/lib/
 
-### Java ###
-# Compiled class file
-*.class
-
-# Log file
-*.log
-
-# BlueJ files
-*.ctxt
-
-# Mobile Tools for Java (J2ME)
-.mtj.tmp/
-
-# Package Files #
-*.jar
-*.war
-*.nar
-*.ear
-*.zip
-*.tar.gz
-*.rar
-
-# virtual machine crash logs, see http://www.java.com/en/download/help/error_hotspot.xml
-hs_err_pid*
-replay_pid*
-
-### VisualStudioCode ###
+# --- VS Code ---
 .vscode/*
 ./*/.vscode/*
 !.vscode/settings.json
@@ -41,92 +50,113 @@ replay_pid*
 !.vscode/extensions.json
 !.vscode/*.code-snippets
 .vscode/
-
-# Local History for Visual Studio Code
 .history/
-
-# Built Visual Studio Code Extensions
-*.vsix
-
-### VisualStudioCode Patch ###
-# Ignore all local history of files
 .history
 .ionide
+.ionide/
+*.vsix
 
-### Windows ###
-# Windows thumbnail cache files
-Thumbs.db
-Thumbs.db:encryptable
-ehthumbs.db
-ehthumbs_vista.db
+# --- IntelliJ IDEA ---
+.idea
+.idea/
+*.iws
+*.iml
+*.ipr
+out/
+!**/src/main/**/out/
+!**/src/test/**/out/
 
-# Dump file
-*.stackdump
+# --- STS / Eclipse / VS Code Java 확장 ---
+.apt_generated
+.classpath
+.factorypath
+.project
+.settings
+.springBeans
+.sts4-cache
+bin/
+!**/src/main/**/bin/
+!**/src/test/**/bin/
 
-# Folder config file
-[Dd]esktop.ini
+# --- NetBeans ---
+/nbproject/private/
+/nbbuild/
+/dist/
+/nbdist/
+/.nb-gradle/
 
-# Recycle Bin used on file shares
-$RECYCLE.BIN/
+# ==========================================
+# 4. Java & Build Artifacts
+# ==========================================
+# Compiled class file / Log / BlueJ / J2ME
+*.class
+*.log
+*.ctxt
+.mtj.tmp/
 
-# Windows Installer files
-*.cab
-*.msi
-*.msix
-*.msm
-*.msp
+# Package Files
+*.jar
+*.war
+*.nar
+*.ear
+*.zip
+*.tar.gz
+*.rar
 
-# Windows shortcuts
-*.lnk
+# JVM crash logs
+hs_err_pid*
+replay_pid*
 
-# End of https://www.toptal.com/developers/gitignore/api/windows,visualstudiocode,java
-
-# Gradle / Java Build Artifacts & Cache
-**/.gradle/
+# ==========================================
+# 5. Gradle / Build Output
+# ==========================================
+HELP.md
+.gradle
 .gradle/
-**/build/
+**/.gradle/
 build/
+**/build/
 **/out/
 **/target/
+**/dist/
 
-# Cloud Provider Kind & K8s Demo
-cloud-provider-kind-v030/
-**/cloud-provider-kind-v030/
-k8s/practice/demo/*
+# Gradle Wrapper는 반드시 커밋 (*.jar 규칙 예외, 위 *.jar 뒤에 위치해야 함)
+!gradle/wrapper/gradle-wrapper.jar
+!**/gradle/wrapper/gradle-wrapper.jar
+!**/src/main/**/build/
+!**/src/test/**/build/
 
-# Environment & Postman
-"**/.postman/" 
-"**/postman/" 
-
-# .env 파일 전체 무시
-**/.env
-
-# Postman 폴더 무시
-**/.postman/
-**/postman/
-
-# AWS CLI Installation files
+# ==========================================
+# 6. Infrastructure & Cloud
+# ==========================================
+# --- AWS SAM / CLI ---
+.aws-sam/
+**/.aws-sam/
+sam-installation/
 awscliv2.zip
+# 주의: aws 라는 이름의 모든 폴더 차단 (Java 패키지명 aws 있으면 /aws/ 로 변경)
 aws/
 
-SpringCloudStudy/jenkins/jenkins-server/jenkins_home/
-
-# Local .terraform directories
+# --- Terraform ---
 **/.terraform/
-
-# .tfstate files
 *.tfstate
 *.tfstate.*
-
-# Crash log files
-crash.log
-crash.*.log
-
-# Exclude override files as they are usually used for local development
+*.tfstate.backup
 override.tf
 override.tf.json
 *_override.tf
 *_override.tf.json
-
-# Separate log files
 terraform.log
+
+# --- Cloud Provider Kind & K8s Demo ---
+cloud-provider-kind-v030/
+**/cloud-provider-kind-v030/
+k8s/practice/demo/
+
+# ==========================================
+# 7. Tools & Services (Jenkins / Postman / Logs)
+# ==========================================
+SpringCloudStudy/jenkins/jenkins-server/jenkins_home/
+**/logs/
+**/.postman/
+**/postman/
