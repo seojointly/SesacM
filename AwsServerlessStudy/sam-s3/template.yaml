@@ -1,0 +1,52 @@
+AWSTemplateFormatVersion: "2010-09-09"
+Transform: AWS::Serverless-2016-10-31
+Description: Sample SAM Template for sam-s3
+
+Globals:
+  Function:
+    Timeout: 20
+    MemorySize: 512
+
+Resources:
+  # Create S3 Bucket
+  ProfileBucket:
+    Type: AWS::S3::Bucket
+    Properties:
+      BucketName: !Sub "simple-profile-bucket-${AWS::AccountId}-5"
+      CorsConfiguration:
+        CorsRules:
+          - AllowedHeaders: ['*']
+            AllowedOrigins: ['*']
+            AllowedMethods: [GET, POST, PUT, DELETE, HEAD]
+            
+  # Create Lambda
+  ProfileFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      Policies: 
+        - S3CrudPolicy:
+            BucketName: !Ref ProfileBucket
+      AutoPublishAlias: live
+      SnapStart:
+        ApplyOn: PublishedVersions
+      CodeUri: s3Function
+      Handler: com.example.user.ProfileHandler::handleRequest
+      Runtime: java21
+      Architectures:
+        - x86_64
+      MemorySize: 2048
+      Environment:
+        Variables:
+          BUCKET_NAME: !Ref ProfileBucket
+      Events:
+        ApiGatewayRestApi:
+          Type: Api
+          Properties:
+            Path: /api/user/profile/getPresignedUrl
+            Method: post
+
+Outputs:
+  ApiGatewayRestApi:
+    Description: "API Gateway endpoint URL"
+    Value: !Sub "https://${ServerlessRestApi}.execute-api.${AWS::Region}.${AWS::URLSuffix}/Prod/api/user/profile/getPresignedUrl/"
+
