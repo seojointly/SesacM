@@ -190,3 +190,7 @@ npm-debug.log*
 .env.*.local
 secrets.json
 secrets.*.json
+
+*.tgz
+!.env.example
+
