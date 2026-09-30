@@ -160,3 +160,33 @@ SpringCloudStudy/jenkins/jenkins-server/jenkins_home/
 **/logs/
 **/.postman/
 **/postman/
+
+# ==========================================
+# 8. Serverless Framework (SLS)
+# ==========================================
+# 패키징/배포 산출물 (CloudFormation 템플릿, zip 등, 가장 중요)
+.serverless/
+**/.serverless/
+
+# 빌드 캐시 (플러그인 사용 시)
+.build/
+**/.build/
+.esbuild/
+**/.esbuild/
+.webpack/
+**/.webpack/
+
+# Node 플러그인 (serverless-offline 등)
+node_modules/
+**/node_modules/
+npm-debug.log*
+
+# 로컬 에뮬레이터 데이터 (dynamodb-local, s3-local 등)
+.dynamodb/
+.s3/
+
+# 시크릿 / 스테이지별 로컬 설정
+.env.local
+.env.*.local
+secrets.json
+secrets.*.json
